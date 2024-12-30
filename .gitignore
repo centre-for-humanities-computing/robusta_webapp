@@ -1,0 +1,3 @@
+.DS_Store
+# all DS_Store files (including those in subfolders)
+**/.DS_Store

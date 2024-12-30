@@ -1,0 +1,119 @@
+/* Adjust the sidebar to fill the full height of the viewport */
+      .sidebar, .well {
+        height: 100vh;
+        overflow-y: auto; /* Add scroll to the sidebar if content overflows */
+        margin-left: 0; /* Remove left margin */
+        border-radius: 0; /* Remove rounded corners */
+      }
+      /* Custom CSS for titlePanel size */
+      .title {
+        height: 10vh;
+        overflow: hidden; /* Prevent overflow if the title is too large */
+      }
+      /* Remove the default padding on the fluidPage */
+      .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      #side_navbar .nav-item {
+        # margin: 0px 0px 0px 50px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .navbar {
+        --bslib-navbar-default-bg: ;
+        --bs-navbar-padding-y: 0;
+        margin: 20px 0px 0px 0px;
+        
+      }
+      .navbar-nav {
+        --bs-nav-link-color: #000;
+      }
+      .navbar-nav > li > a {
+        font-size: 22px; /* Change this value to adjust font size */
+        --bs-nav-link-padding-y: 0;
+      }
+      .nav-item {
+        margin: 0px 0px 0px 10px;
+      }
+      .shiny-notification {
+        width: 800px;
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+      }
+      .error-message {
+        background-color: #f8d7da;   /* Light red background */
+        color: #721c24;              /* Dark red text */
+        padding: 20px;               /* Padding for the text */
+        border-radius: 5px;          /* Rounded corners */
+        text-align: center;          /* Center the text */
+        font-weight: bold;           /* Bold text */
+        width: 50%;                  /* Adjust width */
+        margin: auto;                /* Center horizontally */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      }
+      .center-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;               /* Adjust height for vertical centering */
+      }
+      .info-icon {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 3px; /* Add horizontal space */
+      }
+
+      .hoverbox {
+        visibility: hidden;
+        width: 200px;
+        background-color: #f9f9f9;
+        color: #000;
+        text-align: left;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        border: 1px solid #ddd;
+        box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+      }
+
+      .hoverbox::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #f9f9f9 transparent transparent transparent;
+      }
+
+      .info-icon:hover .hoverbox {
+        visibility: visible;
+      }
+      #sidebar_id {
+        background-color: #f9f9f9;
+      }
+      #div_submit_button {
+        margin: 0;
+        position: absolute;
+        left: 25%;
+        bottom: 10%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+      #div_download_button {
+        margin: 0;
+        position: absolute;
+        right: 0%;
+        bottom: 10%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
