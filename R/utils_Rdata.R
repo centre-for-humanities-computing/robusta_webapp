@@ -218,7 +218,7 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
   results = ajoutL[,c(3,4,1,2)]
   
   pdf("temp_data/plots/07_robustnessExperimentA01.pdf", width = 7, height = 5)
-  p1 = ggplot(subset(results, level != 0.98)) + 
+  p1 = ggplot(results) + 
     geom_point(aes(x = keptPortion, y = value, col = level)) + 
     geom_line(aes(x = keptPortion, y = value, col = level)) + 
     scale_y_continuous(limits = c(0.49,1)) + 
@@ -268,8 +268,11 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
   }
   
   originalInterval = tibble(inf = NA, sup = NA, level = levelsHigh)
+  print(levelsHigh)
   for (j in 1:LE){
+    print(levelsHigh[j])
     thisQuantile = subset(allQuantilesT, level == levelsHigh[j])
+    print(thisQuantile)
     indExceed = which(pctOriginal$iso > thisQuantile$value)
     difExceed = c(0,diff(indExceed))
     indJump = which(difExceed>2)
@@ -293,12 +296,12 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
   }
   
   pdf("temp_data/plots/07_robustnessExperimentA02.pdf", width = 7, height = 5)
-  p2 = ggplot(subset(stats, level != 0.98)) +
+  p2 = ggplot(stats) +
     geom_density_ridges(aes(x = center, y = paste0(portion*100,"%"), height = after_stat(density), fill = as.factor(level)), linewidth = 0.25) +
     geom_vline(aes(xintercept = (inf+sup)/2, lty = "Center of original interval"), linewidth = 0.75, alpha = 0.5,
-               data = subset(originalInterval, level != 0.98)) +
+               data = originalInterval) +
     scale_linetype_manual(values = 2) + 
-    scale_x_continuous(limits = c(0,8000)) + 
+    scale_x_continuous(limits = c(0,8000)) +
     labs(y = "Portion of kept sites in the simulation", x = "Center of distance interval", lty = "", fill = NULL) + 
     guides(fill="none") + 
     ggtitle("Second comparison tool") +
@@ -377,9 +380,24 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
     for (k in 1:nbRobSc){
       thisSp = shockedSp[[k]]
       p1 = ggplot() +
-        layer_spatial(data = sp_unmark, col = "red", fill="antiquewhite") +
-        layer_spatial(data = thisSp, fill = NA, col = "black") +
-        theme_void()
+        layer_spatial(data = sp_unmark, aes(color = "Original Sites"), fill = "antiquewhite") +
+        layer_spatial(data = thisSp, aes(color = "Selected Sites"), fill = NA) +
+        scale_color_manual(
+          values = c("Original Sites" = "red", "Selected Sites" = "black"),
+          guide = guide_legend(
+            override.aes = list(
+              fill = c("red","black"),
+              color = c("red","black"),
+              shape = 21
+            )
+          )
+        ) +
+        labs(color = NULL) +
+        theme_void() +
+        theme(
+          legend.position = "bottom",
+          legend.text = element_text(size = 12)
+        )
       thisData = tibble(y = pctShockedData[,k], x = pctOriginal$r)
       p3 = p0 + geom_line(aes(x=x, y=y), data = thisData, linewidth = 0.75) + 
         scale_y_continuous(limits = c(0,4.5)) + 
@@ -415,7 +433,7 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
               all_plots_a = all_plots_a))
 }
 
-original_pcf_function <- function(sp_unmark, nsim){
+original_pcf_function <- function(sp_unmark, nsim, quantiles){
   
   s100 <- envelope(sp_unmark, fun=pcfinhom, nsim = nsim, divisor="d", correction = "iso")
   
@@ -426,7 +444,7 @@ original_pcf_function <- function(sp_unmark, nsim){
   thisAdd = tibble(x = s100$r, ymin = s100$lo,
                    ymax = s100$hi)
   p0 = p0 + geom_ribbon(aes(x = x, ymin = ymin, ymax = ymax), data = thisAdd, 
-                        fill = heat.colors(1), alpha = 0.5, lty =  "dotted", 
+                        fill = "#8d8d8d", alpha = 0.5, lty =  "dotted", 
                         col=alpha("black", 0.2))
   
   p3 = p0 + geom_line(aes(x=r, y=obs), data = s100, linewidth = 0.75) + 
@@ -478,7 +496,7 @@ big_processing_func <- function(file_shp, file_poly, nsim, clusters, nbRobSc, qu
     
     
     ########## start of scripts 01_...R. Output two RData objects #########
-    original_pcf_plot <- original_pcf_function(data[["sp_unmark"]], nsim*5)
+    original_pcf_plot <- original_pcf_function(sp_unmark = data[["sp_unmark"]], nsim = nsim*5, quantiles = quantiles)
     
     
     

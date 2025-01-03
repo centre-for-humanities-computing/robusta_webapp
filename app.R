@@ -7,7 +7,7 @@ library(grid)
 library(gridExtra)
 library(bslib)
 source("R/utils_Rdata.R")
-options(shiny.port = 8050)
+options(shiny.r.port = 8050)
 
 getwd()
 
@@ -41,16 +41,35 @@ ui <- fluidPage(
           p("Quantile Selection"),
           accordion(
             accordion_panel("Expand for options",
-              checkboxInput("quantile_50", "50% quantile", FALSE),
-              checkboxInput("quantile_80", "80% quantile", FALSE),
-              checkboxInput("quantile_90", "90% quantile", FALSE),
-              checkboxInput("quantile_95", "95% quantile", TRUE),
-              checkboxInput("quantile_98", "98% quantile", FALSE),
-              checkboxInput("quantile_99", "99% quantile", FALSE),
+              # checkboxInput("quantile_50_test", "50% quantile", FALSE),
+              # checkboxInput("quantile_80_test", "80% quantile", FALSE),
+              checkboxInput("quantile_90_test", "90% quantile", FALSE),
+              checkboxInput("quantile_95_test", "95% quantile", TRUE),
+              checkboxInput("quantile_98_test", "98% quantile", FALSE),
+              checkboxInput("quantile_99_test", "99% quantile", FALSE),
+              checkboxInput("quantile_995_test", "99.5% quantile", FALSE),
             ), open = FALSE
           ),
           div(actionButton("submit_button_1", "Submit", class = "btn-success"), id = "div_submit_button"),
           div(downloadButton("download1"), id = "div_download_button"),
+          div(
+            style = "position: fixed; bottom: 2%; left: 2.5%; width: 4%; text-align: center;",
+            a(
+              href = "https://github.com/centre-for-humanities-computing/robusta_webapp",
+              icon("github", "fa-2x"),
+              target = "_blank",
+              style = "color: #0B1215;"
+            )
+          ),
+          div(
+            style = "position: fixed; bottom: 2%; left: 8.5%; width: 4%; text-align: center;",
+            a(
+              href = "https://osf.io/u2gyq/",
+              icon("paperclip", "fa-2x"),
+              target = "_blank",
+              style = "color: #0B1215;"
+            )
+          )
         )
         ),
         tabPanel("Upload",
@@ -76,16 +95,17 @@ ui <- fluidPage(
             p("Quantile Selection"),
             accordion(
               accordion_panel("Expand for options",
-                              checkboxInput("quantile_50", "50% quantile", FALSE),
-                              checkboxInput("quantile_80", "80% quantile", FALSE),
-                              checkboxInput("quantile_90", "90% quantile", FALSE),
-                              checkboxInput("quantile_95", "95% quantile", TRUE),
-                              checkboxInput("quantile_98", "98% quantile", FALSE),
-                              checkboxInput("quantile_99", "99% quantile", FALSE),
+                # checkboxInput("quantile_50_upload", "50% quantile", FALSE),
+                # checkboxInput("quantile_80_upload", "80% quantile", FALSE),
+                checkboxInput("quantile_90_upload", "90% quantile", FALSE),
+                checkboxInput("quantile_95_upload", "95% quantile", TRUE),
+                checkboxInput("quantile_98_upload", "98% quantile", FALSE),
+                checkboxInput("quantile_99_upload", "99% quantile", FALSE),
+                checkboxInput("quantile_995_upload", "99.5% quantile", FALSE),
               ), open = FALSE
             ),
             div(actionButton("submit_button_2", "Submit", class = "btn-success"), id = "div_submit_button"),
-            div(downloadButton("download1"), id = "div_download_button"),
+            div(downloadButton("download2"), id = "div_download_button"),
           )
         ),
       ),
@@ -186,24 +206,20 @@ server <- function(input, output, session) {
     file_poly <- readOGR("data/montecristi/nmcpoly1.shp")
     
     quantiles <- c()
-    # 50 is special
-    # if (input$quantile_50){
-    #   quantiles <- c(quantiles, 50)
-    # }
-    if (input$quantile_80){
-      quantiles <- c(quantiles, 0.8)
-    }
-    if (input$quantile_90){
+    if (input$quantile_90_test || input$quantile_90_upload){
       quantiles <- c(quantiles, 0.9)
     }
-    if (input$quantile_95){
+    if (input$quantile_95_test || input$quantile_95_upload){
       quantiles <- c(quantiles, 0.95)
     }
-    if (input$quantile_98){
+    if (input$quantile_98_test || input$quantile_98_upload){
       quantiles <- c(quantiles, 0.98)
     }
-    if (input$quantile_99){
+    if (input$quantile_99_test || input$quantile_99_upload){
       quantiles <- c(quantiles, 0.99)
+    }
+    if (input$quantile_995_test || input$quantile_995_upload){
+      quantiles <- c(quantiles, 0.995)
     }
     
     process_output <- big_processing_func(file_shp = file_shp,
@@ -212,7 +228,8 @@ server <- function(input, output, session) {
                         clusters = 5,
                         nbRobSc = input$nbRobSc_1,
                         quantiles = quantiles,
-                        quantile_50 = input$quantile_50)
+                        quantile_50 = TRUE)
+                        # quantile_50 = input$quantile_50_test || input$quantile_50_upload)
     
     output$plot_1_1 <- renderPlot({
       grid.draw(process_output[[1]][[1]])
@@ -289,6 +306,12 @@ server <- function(input, output, session) {
     output$plot_4_90_2_map <- renderPlot({
       grid.draw(process_output[[5]][[5]])
     }, res = 96)
+    output$plot_4_100_1 <- renderPlot({
+      grid.draw(process_output[[2]][[6]])
+    }, res = 96)
+    output$plot_4_100_1_map <- renderPlot({
+      grid.draw(process_output[[3]][[6]])
+    }, res = 96)
     
     function_ran(TRUE)
     })
@@ -321,11 +344,30 @@ server <- function(input, output, session) {
     file_shp <- readOGR(paste(tempdirname_1, shp_upload1$name[grep(pattern = "*.shp$", shp_upload1$name)], sep = "/"))
     file_poly <- readOGR(paste(tempdirname_2, shp_upload2$name[grep(pattern = "*.shp$", shp_upload2$name)], sep = "/"))
     
+    quantiles <- c()
+    if (input$quantile_90_test || input$quantile_90_upload){
+      quantiles <- c(quantiles, 0.9)
+    }
+    if (input$quantile_95_test || input$quantile_95_upload){
+      quantiles <- c(quantiles, 0.95)
+    }
+    if (input$quantile_98_test || input$quantile_98_upload){
+      quantiles <- c(quantiles, 0.98)
+    }
+    if (input$quantile_99_test || input$quantile_99_upload){
+      quantiles <- c(quantiles, 0.99)
+    }
+    if (input$quantile_995_test || input$quantile_995_upload){
+      quantiles <- c(quantiles, 0.995)
+    }
+
     process_output <- big_processing_func(file_shp = file_shp,
                          file_poly = file_poly,
-                         nsim = input$mc_simulations_2,
-                         n_iter = input$n_iter_2,
-                         nbRobSc = input$nbRobSc_2)
+                         nsim = input$mc_simulations_2/5, # it should be divided by number of clusters
+                         clusters = 5,
+                         nbRobSc = input$nbRobSc_2,
+                         quantiles = quantiles,
+                         quantile_50 = TRUE)
     
     output$plot_1_1 <- renderPlot({
       grid.draw(process_output[[1]][[1]])
@@ -415,6 +457,8 @@ server <- function(input, output, session) {
         h4("Original PCF"),
         HTML("<br>"),
         splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_100_1", width = "800px", height = "600px"), plotOutput("plot_3_100_1_map", width = "800px", height = "600px"))
+        # HTML("<br>"),
+        # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_100_1", width = "800px", height = "600px"), plotOutput("plot_4_100_1_map", width = "800px", height = "600px"))
       )
     } else {
       div(
@@ -435,25 +479,33 @@ server <- function(input, output, session) {
         HTML("<br>"),
         h4("Robustness PCF"),
         HTML("<br>"),
-        h5("For 50% of points"),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_50_1", width = "800px", height = "600px"), plotOutput("plot_4_50_1_map", width = "800px", height = "600px")),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_50_2", width = "800px", height = "600px"), plotOutput("plot_4_50_2_map", width = "800px", height = "600px")),
-        HTML("<br>"),
-        h5("For 60% of points"),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_60_1", width = "800px", height = "600px"), plotOutput("plot_4_60_1_map", width = "800px", height = "600px")),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_60_2", width = "800px", height = "600px"), plotOutput("plot_4_60_2_map", width = "800px", height = "600px")),
-        HTML("<br>"),
-        h5("For 70% of points"),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_70_1", width = "800px", height = "600px"), plotOutput("plot_4_70_1_map", width = "800px", height = "600px")),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_70_2", width = "800px", height = "600px"), plotOutput("plot_4_70_2_map", width = "800px", height = "600px")),
-        HTML("<br>"),
-        h5("For 80% of points"),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_80_1", width = "800px", height = "600px"), plotOutput("plot_4_80_1_map", width = "800px", height = "600px")),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_80_2", width = "800px", height = "600px"), plotOutput("plot_4_80_2_map", width = "800px", height = "600px")),
-        HTML("<br>"),
-        h5("For 90% of points"),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_90_1", width = "800px", height = "600px"), plotOutput("plot_4_90_1_map", width = "800px", height = "600px")),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_90_2", width = "800px", height = "600px"), plotOutput("plot_4_90_2_map", width = "800px", height = "600px")),
+        tabsetPanel(
+          tabPanel("50% of points",
+            HTML("<br>"),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_50_1", width = "800px", height = "600px"), plotOutput("plot_4_50_1_map", width = "800px", height = "600px")),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_50_2", width = "800px", height = "600px"), plotOutput("plot_4_50_2_map", width = "800px", height = "600px"))
+          ),
+          tabPanel("60% of points",
+            HTML("<br>"),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_60_1", width = "800px", height = "600px"), plotOutput("plot_4_60_1_map", width = "800px", height = "600px")),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_60_2", width = "800px", height = "600px"), plotOutput("plot_4_60_2_map", width = "800px", height = "600px"))
+          ),
+          tabPanel("70% of points",
+            HTML("<br>"),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_70_1", width = "800px", height = "600px"), plotOutput("plot_4_70_1_map", width = "800px", height = "600px")),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_70_2", width = "800px", height = "600px"), plotOutput("plot_4_70_2_map", width = "800px", height = "600px"))
+          ),
+          tabPanel("80% of points",
+            HTML("<br>"),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_80_1", width = "800px", height = "600px"), plotOutput("plot_4_80_1_map", width = "800px", height = "600px")),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_80_2", width = "800px", height = "600px"), plotOutput("plot_4_80_2_map", width = "800px", height = "600px"))
+          ),
+          tabPanel("90% of points",
+            HTML("<br>"),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_90_1", width = "800px", height = "600px"), plotOutput("plot_4_90_1_map", width = "800px", height = "600px")),
+            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_90_2", width = "800px", height = "600px"), plotOutput("plot_4_90_2_map", width = "800px", height = "600px"))
+          )
+        )
       )
     } else {
       div(
@@ -476,7 +528,12 @@ server <- function(input, output, session) {
         # HTML("<br>"),
         # splitLayout(cellWidths = c("50%", "50%"), h5("Original PCF"), h5("Robustness PCF")),
         HTML("<br>"),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_1_1", width = "800px", height = "1100px"), plotOutput("plot_1_2", width = "800px", height = "1100px")),
+        # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_1_1", width = "800px", height = "1100px"), plotOutput("plot_1_2", width = "800px", height = "1100px")),
+        div(
+          style = "margin: 0 auto; width: 70%;",
+          plotOutput("plot_1_1", width = "100%"),
+          plotOutput("plot_1_2", width = "100%")
+        )
       )
     } else {
       div(
@@ -493,6 +550,23 @@ server <- function(input, output, session) {
   
   # Create the download handler for the folder
   output$download1 <- downloadHandler(
+    
+    # Specify the name of the file to download
+    filename = function() {
+      paste("folder_contents", Sys.Date(), ".zip", sep = "")
+    },
+    
+    # Define the content that will be sent to the user
+    content = function(file) {
+      folder_path <- "temp_data"  # Change this to your folder path
+      
+      # Create a temporary zip file of the folder contents
+      zip::zip(zipfile = file, files = list.files(folder_path, full.names = TRUE))
+    }
+  )
+
+  # Create the download handler for the folder
+  output$download2 <- downloadHandler(
     
     # Specify the name of the file to download
     filename = function() {
