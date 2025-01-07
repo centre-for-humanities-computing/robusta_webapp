@@ -8,8 +8,7 @@ library(gridExtra)
 library(bslib)
 source("R/utils_Rdata.R")
 options(shiny.r.port = 8050)
-
-getwd()
+library(zip)
 
 # loading the text for showing in the server
 name_text <- paste(readLines("data/texts/name.txt"), collapse = "\n")
@@ -86,8 +85,6 @@ ui <- fluidPage(
             br(),
             fileInput("upload2", label = "Upload Spatial Polygons", accept = c(".shp", ".cpg", ".dbf", ".prj", ".sbn", ".sbx", ".shx"), multiple = TRUE),
             br(),
-            # selectInput("dataset", label = "Dataset", choices = c("Random Sampling", "Weighted Sampling")),
-            # br(),
             numericInput("mc_simulations_2", label = "Number of CSR simulations", value = 25, min = 1, max = 10000),
             br(),
             numericInput("nbRobSc_2", label = "Number of Robustness Scenarios", value = 10, min = 1, max = 10000),
@@ -117,6 +114,7 @@ ui <- fluidPage(
         tabPanel("Home",
                  hr(style = "margin: 0px 20px 20px 0px"),
                  fluidPage(
+                   uiOutput("test"),
                    h3(name_text),
                    p(introduction_text),
                    h4("Methods"),
@@ -151,28 +149,6 @@ ui <- fluidPage(
                               uiOutput("comparison_tools_conditional")
                               )
                      ),
-                   #uiOutput("dynamic_tabs")
-                   # Output to display the message and click count
-                   # verbatimTextOutput("message"),
-                   # verbatimTextOutput("temp_func_value"),
-                   # verbatimTextOutput("function_success"),
-                   
-                   # h4("Comparison Tools"),
-                   # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_1", width = "800px", height = "1100px"), plotOutput("plot_2", width = "800px", height = "1100px")),
-                   # h4("Robustness Scenarios"),
-                   # h5("For 50% of points"),
-                   # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_50", width = "800px", height = "1100px"), plotOutput("plot_4_50", width = "800px", height = "1100px")),
-                   # h5("For 60% of points"),
-                   # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_60", width = "800px", height = "1100px"), plotOutput("plot_4_60", width = "800px", height = "1100px")),
-                   # h5("For 70% of points"),
-                   # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_70", width = "800px", height = "1100px"), plotOutput("plot_4_70", width = "800px", height = "1100px")),
-                   # h5("For 80% of points"),
-                   # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_80", width = "800px", height = "1100px"), plotOutput("plot_4_80", width = "800px", height = "1100px")),
-                   # h5("For 90% of points"),
-                   # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_90", width = "800px", height = "1100px"), plotOutput("plot_4_90", width = "800px", height = "1100px")),
-                   # h5("For 100% of points"),
-                   # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_100", width = "800px", height = "1100px"), plotOutput("plot_4_100", width = "800px", height = "1100px")),
-                   
                  ),
         ),
         tabPanel("More Info",
@@ -198,10 +174,13 @@ server <- function(input, output, session) {
   
   # Reactive value to track if the function has run
   function_ran <- reactiveVal(FALSE)
+
+  # object to hold output from the function
+  data_output <- reactiveValues(data = NULL)
   
   # Observer to start function processing
   observeEvent(input$submit_button_1, {
-    
+
     file_shp <- readOGR("data/montecristi/mc-db-95-clean.shp")
     file_poly <- readOGR("data/montecristi/nmcpoly1.shp")
     
@@ -222,7 +201,7 @@ server <- function(input, output, session) {
       quantiles <- c(quantiles, 0.995)
     }
     
-    process_output <- big_processing_func(file_shp = file_shp,
+    data_output$data <- big_processing_func(file_shp = file_shp,
                         file_poly = file_poly,
                         nsim = input$mc_simulations_1/5, # it should be divided by number of clusters
                         clusters = 5,
@@ -230,91 +209,12 @@ server <- function(input, output, session) {
                         quantiles = quantiles,
                         quantile_50 = TRUE)
                         # quantile_50 = input$quantile_50_test || input$quantile_50_upload)
-    
-    output$plot_1_1 <- renderPlot({
-      grid.draw(process_output[[1]][[1]])
-    }, res = 96)
-    
-    output$plot_1_2 <- renderPlot({
-      grid.draw(process_output[[1]][[2]])
-    }, res = 96)
-    
-    output$plot_3_100_1 <- renderPlot({
-      grid.draw(process_output[[6]])
-    }, res = 96)
-    output$plot_3_100_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[6]])
-    }, res = 96)
-    
-    output$plot_4_50_1 <- renderPlot({
-      grid.draw(process_output[[2]][[1]])
-    }, res = 96)
-    output$plot_4_50_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[1]])
-    }, res = 96)
-    output$plot_4_50_2 <- renderPlot({
-      grid.draw(process_output[[4]][[1]])
-    }, res = 96)
-    output$plot_4_50_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[1]])
-    }, res = 96)
-    output$plot_4_60_1 <- renderPlot({
-      grid.draw(process_output[[2]][[2]])
-    }, res = 96)
-    output$plot_4_60_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[2]])
-    }, res = 96)
-    output$plot_4_60_2 <- renderPlot({
-      grid.draw(process_output[[4]][[2]])
-    }, res = 96)
-    output$plot_4_60_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[2]])
-    }, res = 96)
-    output$plot_4_70_1 <- renderPlot({
-      grid.draw(process_output[[2]][[3]])
-    }, res = 96)
-    output$plot_4_70_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[3]])
-    }, res = 96)
-    output$plot_4_70_2 <- renderPlot({
-      grid.draw(process_output[[4]][[3]])
-    }, res = 96)
-    output$plot_4_70_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[3]])
-    }, res = 96)
-    output$plot_4_80_1 <- renderPlot({
-      grid.draw(process_output[[2]][[4]])
-    }, res = 96)
-    output$plot_4_80_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[4]])
-    }, res = 96)
-    output$plot_4_80_2 <- renderPlot({
-      grid.draw(process_output[[4]][[4]])
-    }, res = 96)
-    output$plot_4_80_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[4]])
-    }, res = 96)
-    output$plot_4_90_1 <- renderPlot({
-      grid.draw(process_output[[2]][[5]])
-    }, res = 96)
-    output$plot_4_90_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[5]])
-    }, res = 96)
-    output$plot_4_90_2 <- renderPlot({
-      grid.draw(process_output[[4]][[5]])
-    }, res = 96)
-    output$plot_4_90_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[5]])
-    }, res = 96)
-    output$plot_4_100_1 <- renderPlot({
-      grid.draw(process_output[[2]][[6]])
-    }, res = 96)
-    output$plot_4_100_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[6]])
-    }, res = 96)
-    
+
     function_ran(TRUE)
+    
     })
+    
+  
 
   # Observer to start function processing
   observeEvent(input$submit_button_2, {
@@ -361,92 +261,53 @@ server <- function(input, output, session) {
       quantiles <- c(quantiles, 0.995)
     }
 
-    process_output <- big_processing_func(file_shp = file_shp,
+    data_output$data <- big_processing_func(file_shp = file_shp,
                          file_poly = file_poly,
                          nsim = input$mc_simulations_2/5, # it should be divided by number of clusters
                          clusters = 5,
                          nbRobSc = input$nbRobSc_2,
                          quantiles = quantiles,
                          quantile_50 = TRUE)
-    
-    output$plot_1_1 <- renderPlot({
-      grid.draw(process_output[[1]][[1]])
-    }, res = 96)
-    
-    output$plot_1_2 <- renderPlot({
-      grid.draw(process_output[[1]][[2]])
-    }, res = 96)
-    
-    output$plot_3_100_1 <- renderPlot({
-      grid.draw(process_output[[6]])
-    }, res = 96)
-    output$plot_3_100_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[6]])
-    }, res = 96)
-    
-    output$plot_4_50_1 <- renderPlot({
-      grid.draw(process_output[[2]][[1]])
-    }, res = 96)
-    output$plot_4_50_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[1]])
-    }, res = 96)
-    output$plot_4_50_2 <- renderPlot({
-      grid.draw(process_output[[4]][[1]])
-    }, res = 96)
-    output$plot_4_50_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[1]])
-    }, res = 96)
-    output$plot_4_60_1 <- renderPlot({
-      grid.draw(process_output[[2]][[2]])
-    }, res = 96)
-    output$plot_4_60_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[2]])
-    }, res = 96)
-    output$plot_4_60_2 <- renderPlot({
-      grid.draw(process_output[[4]][[2]])
-    }, res = 96)
-    output$plot_4_60_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[2]])
-    }, res = 96)
-    output$plot_4_70_1 <- renderPlot({
-      grid.draw(process_output[[2]][[3]])
-    }, res = 96)
-    output$plot_4_70_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[3]])
-    }, res = 96)
-    output$plot_4_70_2 <- renderPlot({
-      grid.draw(process_output[[4]][[3]])
-    }, res = 96)
-    output$plot_4_70_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[3]])
-    }, res = 96)
-    output$plot_4_80_1 <- renderPlot({
-      grid.draw(process_output[[2]][[4]])
-    }, res = 96)
-    output$plot_4_80_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[4]])
-    }, res = 96)
-    output$plot_4_80_2 <- renderPlot({
-      grid.draw(process_output[[4]][[4]])
-    }, res = 96)
-    output$plot_4_80_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[4]])
-    }, res = 96)
-    output$plot_4_90_1 <- renderPlot({
-      grid.draw(process_output[[2]][[5]])
-    }, res = 96)
-    output$plot_4_90_1_map <- renderPlot({
-      grid.draw(process_output[[3]][[5]])
-    }, res = 96)
-    output$plot_4_90_2 <- renderPlot({
-      grid.draw(process_output[[4]][[5]])
-    }, res = 96)
-    output$plot_4_90_2_map <- renderPlot({
-      grid.draw(process_output[[5]][[5]])
-    }, res = 96)
-    
+
     function_ran(TRUE)
   })
+    
+output$plot_100_1 <- renderPlot({
+      grid.draw(data_output$data[[1]])
+    }, res = 96)
+  output$plot_50_1 <- renderPlot({
+      grid.draw(data_output$data[[2]][["50"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_50_2 <- renderPlot({
+      grid.draw(data_output$data[[2]][["50"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_60_1 <- renderPlot({
+      grid.draw(data_output$data[[2]][["60"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_60_2 <- renderPlot({
+      grid.draw(data_output$data[[2]][["60"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_70_1 <- renderPlot({
+      grid.draw(data_output$data[[2]][["70"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_70_2 <- renderPlot({
+      grid.draw(data_output$data[[2]][["70"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_80_1 <- renderPlot({
+      grid.draw(data_output$data[[2]][["80"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_80_2 <- renderPlot({
+      grid.draw(data_output$data[[2]][["80"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_90_1 <- renderPlot({
+      grid.draw(data_output$data[[2]][["90"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_90_2 <- renderPlot({
+      grid.draw(data_output$data[[2]][["90"]][[sample(data_output$data[[4]], 1)]])
+    }, res = 96)
+  output$plot_compare <- renderPlot({
+      grid.draw(data_output$data[[3]])
+    }, res = 130)
   
   # Dynamically update the content of the tabPanel based on whether the function has run
   output$pcf_original_conditional <- renderUI({
@@ -456,9 +317,7 @@ server <- function(input, output, session) {
         HTML("<br>"),
         h4("Original PCF"),
         HTML("<br>"),
-        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_3_100_1", width = "800px", height = "600px"), plotOutput("plot_3_100_1_map", width = "800px", height = "600px"))
-        # HTML("<br>"),
-        # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_100_1", width = "800px", height = "600px"), plotOutput("plot_4_100_1_map", width = "800px", height = "600px"))
+        plotOutput("plot_100_1", width = "100%")
       )
     } else {
       div(
@@ -480,31 +339,36 @@ server <- function(input, output, session) {
         h4("Robustness PCF"),
         HTML("<br>"),
         tabsetPanel(
-          tabPanel("50% of points",
+            tabPanel("50% of points",
             HTML("<br>"),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_50_1", width = "800px", height = "600px"), plotOutput("plot_4_50_1_map", width = "800px", height = "600px")),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_50_2", width = "800px", height = "600px"), plotOutput("plot_4_50_2_map", width = "800px", height = "600px"))
-          ),
-          tabPanel("60% of points",
+            plotOutput("plot_50_1", width = "100%"),
+            HTML("<br><br>"),
+            plotOutput("plot_50_2", width = "100%")
+            ),
+            tabPanel("60% of points",
             HTML("<br>"),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_60_1", width = "800px", height = "600px"), plotOutput("plot_4_60_1_map", width = "800px", height = "600px")),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_60_2", width = "800px", height = "600px"), plotOutput("plot_4_60_2_map", width = "800px", height = "600px"))
-          ),
-          tabPanel("70% of points",
+            plotOutput("plot_60_1", width = "100%"),
+            HTML("<br><br>"),
+            plotOutput("plot_60_2", width = "100%")
+            ),
+            tabPanel("70% of points",
             HTML("<br>"),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_70_1", width = "800px", height = "600px"), plotOutput("plot_4_70_1_map", width = "800px", height = "600px")),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_70_2", width = "800px", height = "600px"), plotOutput("plot_4_70_2_map", width = "800px", height = "600px"))
-          ),
-          tabPanel("80% of points",
+            plotOutput("plot_70_1", width = "100%"),
+            HTML("<br><br>"),
+            plotOutput("plot_70_2", width = "100%")
+            ),
+            tabPanel("80% of points",
             HTML("<br>"),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_80_1", width = "800px", height = "600px"), plotOutput("plot_4_80_1_map", width = "800px", height = "600px")),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_80_2", width = "800px", height = "600px"), plotOutput("plot_4_80_2_map", width = "800px", height = "600px"))
-          ),
-          tabPanel("90% of points",
+            plotOutput("plot_80_1", width = "100%"),
+            HTML("<br><br>"),
+            plotOutput("plot_80_2", width = "100%")
+            ),
+            tabPanel("90% of points",
             HTML("<br>"),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_90_1", width = "800px", height = "600px"), plotOutput("plot_4_90_1_map", width = "800px", height = "600px")),
-            splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_4_90_2", width = "800px", height = "600px"), plotOutput("plot_4_90_2_map", width = "800px", height = "600px"))
-          )
+            plotOutput("plot_90_1", width = "100%"),
+            HTML("<br><br>"),
+            plotOutput("plot_90_2", width = "100%")
+            )
         )
       )
     } else {
@@ -525,15 +389,8 @@ server <- function(input, output, session) {
       tagList(
         HTML("<br>"),
         h4("Comparison Tools"),
-        # HTML("<br>"),
-        # splitLayout(cellWidths = c("50%", "50%"), h5("Original PCF"), h5("Robustness PCF")),
         HTML("<br>"),
-        # splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_1_1", width = "800px", height = "1100px"), plotOutput("plot_1_2", width = "800px", height = "1100px")),
-        div(
-          style = "margin: 0 auto; width: 70%;",
-          plotOutput("plot_1_1", width = "100%"),
-          plotOutput("plot_1_2", width = "100%")
-        )
+        plotOutput("plot_compare", width = "80%", height = "800px")
       )
     } else {
       div(
@@ -550,43 +407,104 @@ server <- function(input, output, session) {
   
   # Create the download handler for the folder
   output$download1 <- downloadHandler(
-    
-    # Specify the name of the file to download
     filename = function() {
-      paste("folder_contents", Sys.Date(), ".zip", sep = "")
+      paste("robusta_plots_", Sys.Date(), ".zip", sep = "")
     },
-    
-    # Define the content that will be sent to the user
     content = function(file) {
-      folder_path <- "temp_data"  # Change this to your folder path
+      # Create a temporary directory
+      temp_dir <- tempdir()
       
-      # Create a temporary zip file of the folder contents
-      zip::zip(zipfile = file, files = list.files(folder_path, full.names = TRUE))
-    }
-  )
+      # Initialize the list of plots to generate
+      plot_list <- list(
+        comparison_tool = data_output$data[[3]],
+        original_pcf = data_output$data[[1]]
+      )
+      
+      for (key in names(data_output$data[[2]])) {
+        for (i in seq_along(data_output$data[[2]][[key]])) {
+        plot_obj <- data_output$data[[2]][[key]][[i]]
+        if (inherits(plot_obj, "grob")) {
+          plot_list[[paste0(key, "_robustness_", i)]] <- plot_obj
+        } else {
+          warning(paste("Skipping non-plot object at key", key, "index", i))
+        }
+        }
+      }
+      
+      # File paths for temporary plot files
+      temp_files <- vector("character", length(plot_list))
+      
+      for (i in seq_along(plot_list)) {
+        # Create temporary file paths
+        temp_file <- file.path(temp_dir, paste0(names(plot_list)[i], ".png"))
+        temp_files[i] <- temp_file
+        
+        # Save the ggplot as a PNG file
+        png(temp_file, width = 1200, height = 600)
+        grid.draw(plot_list[[i]])
+        dev.off()
+      }
+
+      # Create the zip file
+      zip::zipr(file, files = temp_files)
+      
+      # Cleanup temporary plot files after creating the zip
+      on.exit(unlink(temp_files), add = TRUE)
+    },
+    contentType = "application/zip"
+)
+
 
   # Create the download handler for the folder
   output$download2 <- downloadHandler(
-    
-    # Specify the name of the file to download
     filename = function() {
-      paste("folder_contents", Sys.Date(), ".zip", sep = "")
+      paste("robusta_plots_", Sys.Date(), ".zip", sep = "")
     },
-    
-    # Define the content that will be sent to the user
     content = function(file) {
-      folder_path <- "temp_data"  # Change this to your folder path
+      # Create a temporary directory
+      temp_dir <- tempdir()
       
-      # Create a temporary zip file of the folder contents
-      zip::zip(zipfile = file, files = list.files(folder_path, full.names = TRUE))
-    }
-  )
+      # Initialize the list of plots to generate
+      plot_list <- list(
+        comparison_tool = data_output$data[[3]],
+        original_pcf = data_output$data[[1]]
+      )
+      
+      for (key in names(data_output$data[[2]])) {
+        for (i in seq_along(data_output$data[[2]][[key]])) {
+        plot_obj <- data_output$data[[2]][[key]][[i]]
+        if (inherits(plot_obj, "grob")) {
+          plot_list[[paste0(key, "_robustness_", i)]] <- plot_obj
+        } else {
+          warning(paste("Skipping non-plot object at key", key, "index", i))
+        }
+        }
+      }
+      
+      # File paths for temporary plot files
+      temp_files <- vector("character", length(plot_list))
+      
+      for (i in seq_along(plot_list)) {
+        # Create temporary file paths
+        temp_file <- file.path(temp_dir, paste0(names(plot_list)[i], ".png"))
+        temp_files[i] <- temp_file
+        
+        # Save the ggplot as a PNG file
+        png(temp_file, width = 1200, height = 600)
+        grid.draw(plot_list[[i]])
+        dev.off()
+      }
+
+      # Create the zip file
+      zip::zipr(file, files = temp_files)
+      
+      # Cleanup temporary plot files after creating the zip
+      on.exit(unlink(temp_files), add = TRUE)
+    },
+    contentType = "application/zip"
+)
   
 }
 
 
 shinyApp(ui, server)
-
-
-
-
