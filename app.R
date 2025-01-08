@@ -7,7 +7,6 @@ library(grid)
 library(gridExtra)
 library(bslib)
 source("R/utils_Rdata.R")
-options(shiny.r.port = 8050)
 library(zip)
 library(shinyjs)
 library(markdown)
@@ -179,12 +178,14 @@ server <- function(input, output, session) {
   
   # Reactive value to track if the function has run
   function_ran <- reactiveVal(FALSE)
+  function_error <- reactiveVal(FALSE)
 
   # object to hold output from the function
   data_output <- reactiveValues(data = NULL)
   
   # Observer to start function processing
   observeEvent(input$submit_button_1, {
+    function_error(FALSE)
 
     file_shp <- readOGR("data/montecristi/mc-db-95-clean.shp")
     file_poly <- readOGR("data/montecristi/nmcpoly1.shp")
@@ -206,16 +207,19 @@ server <- function(input, output, session) {
       quantiles <- c(quantiles, 0.995)
     }
     
-    data_output$data <- big_processing_func(file_shp = file_shp,
+    data_output$data <- tryCatch({big_processing_func(file_shp = file_shp,
                         file_poly = file_poly,
-                        nsim = input$mc_simulations_1/5, # it should be divided by number of clusters
+                        nsim = as.integer(input$mc_simulations_1/5), # it should be divided by number of clusters
                         clusters = 5,
                         nbRobSc = input$nbRobSc_1,
                         quantiles = quantiles,
-                        quantile_50 = TRUE)
-                        # quantile_50 = input$quantile_50_test || input$quantile_50_upload)
+                        quantile_50 = TRUE)}, error = function(e) {return(NULL)})
 
-    function_ran(TRUE)
+    if(is.null(data_output$data)){
+      function_error(TRUE)
+    } else {
+       function_ran(TRUE)
+    }
 
     updateTabsetPanel(session, "main_tab",
       selected = "Output"
@@ -272,13 +276,17 @@ server <- function(input, output, session) {
 
     data_output$data <- big_processing_func(file_shp = file_shp,
                          file_poly = file_poly,
-                         nsim = input$mc_simulations_2/5, # it should be divided by number of clusters
+                         nsim = as.integer(input$mc_simulations_2/5), # it should be divided by number of clusters
                          clusters = 5,
                          nbRobSc = input$nbRobSc_2,
                          quantiles = quantiles,
                          quantile_50 = TRUE)
 
-    function_ran(TRUE)
+    if(data_output$data == NULL){
+      function_error(TRUE)
+    } else {
+       function_ran(TRUE)
+    }
 
     updateTabsetPanel(session, "main_tab",
       selected = "Output"
@@ -331,6 +339,14 @@ output$plot_100_1 <- renderPlot({
         h4("Pair Correlation Function based on 100% of sites"),
         HTML("<br>"),
         plotOutput("plot_100_1", width = "100%")
+      )
+    } else if (function_error()) {
+      div(
+        class = "center-content",  # Wrapper to center content
+        div(
+          class = "error-message",  # Custom error styling
+          "An error occured, and is likely due to low number of Monte Carlo simulations. Try running it again or increase number of simulations to at least 25."
+        )
       )
     } else {
       div(
@@ -390,6 +406,14 @@ output$plot_100_1 <- renderPlot({
             )
         )
       )
+    } else if (function_error()) {
+      div(
+        class = "center-content",  # Wrapper to center content
+        div(
+          class = "error-message",  # Custom error styling
+          "An error occured, and is likely due to low number of Monte Carlo simulations. Try running it again or increase number of simulations to at least 25."
+        )
+      )
     } else {
       div(
         class = "center-content",  # Wrapper to center content
@@ -410,6 +434,14 @@ output$plot_100_1 <- renderPlot({
         h4("Comparison Tools"),
         HTML("<br>"),
         plotOutput("plot_compare", width = "80%", height = "800px")
+      )
+    } else if (function_error()) {
+      div(
+        class = "center-content",  # Wrapper to center content
+        div(
+          class = "error-message",  # Custom error styling
+          "An error occured, and is likely due to low number of Monte Carlo simulations. Try running it again or increase number of simulations to at least 25."
+        )
       )
     } else {
       div(

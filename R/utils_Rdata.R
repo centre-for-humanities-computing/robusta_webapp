@@ -193,7 +193,11 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
     ylab("% of robustness scenarios\nin which the conclusion is similar") + 
     theme(legend.position = "bottom", 
           axis.title = element_text(size = 8),
-          legend.text = element_text(size = 9)) + 
+          legend.text = element_text(size = 9, margin = margin(r = 10, unit = "pt")),
+          legend.title = element_text(
+            size = 9,
+            margin = margin(r = 10)
+          )) +
     ggtitle("First comparison tool")
   
   robustness_experiment_a01_plot <- p1
@@ -346,7 +350,7 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
         theme_void() +
         theme(
           legend.position = "bottom",
-          legend.text = element_text(size = 9)
+          legend.text = element_text(size = 9, margin = margin(l = 5, r = 10, unit = "pt"))
         )
       thisData = tibble(y = pctShockedData[,k], x = pctOriginal$r)
       p3 = p0 + geom_line(aes(x=x, y=y), data = thisData, linewidth = 0.75) + 
