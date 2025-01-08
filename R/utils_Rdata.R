@@ -192,7 +192,8 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
     xlab("% of sites that are kept in each robustness scenario") + 
     ylab("% of robustness scenarios\nin which the conclusion is similar") + 
     theme(legend.position = "bottom", 
-          axis.title = element_text(size = 8)) + 
+          axis.title = element_text(size = 8),
+          legend.text = element_text(size = 9)) + 
     ggtitle("First comparison tool")
   
   robustness_experiment_a01_plot <- p1
@@ -345,7 +346,7 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
         theme_void() +
         theme(
           legend.position = "bottom",
-          legend.text = element_text(size = 12)
+          legend.text = element_text(size = 9)
         )
       thisData = tibble(y = pctShockedData[,k], x = pctOriginal$r)
       p3 = p0 + geom_line(aes(x=x, y=y), data = thisData, linewidth = 0.75) + 
