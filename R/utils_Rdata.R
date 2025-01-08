@@ -188,9 +188,12 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
     geom_point(aes(x = keptPortion, y = value, col = level)) + 
     geom_line(aes(x = keptPortion, y = value, col = level)) + 
     scale_y_continuous(limits = c(0.49,1)) + 
-    theme_light() + guides(col=guide_legend(nrow=1, title = "quantile level"))+
-    xlab("% of sites that are kept in each robustness scenario") + ylab("% of robustness scenarios\nin which the conclusion is similar") + 
-    theme(legend.position = "bottom") + ggtitle("First comparison tool")
+    theme_light() + guides(col=guide_legend(nrow=1, title = "Quantile level"))+
+    xlab("% of sites that are kept in each robustness scenario") + 
+    ylab("% of robustness scenarios\nin which the conclusion is similar") + 
+    theme(legend.position = "bottom", 
+          axis.title = element_text(size = 8)) + 
+    ggtitle("First comparison tool")
   
   robustness_experiment_a01_plot <- p1
   
@@ -263,7 +266,7 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
     ggtitle("Second comparison tool") +
     theme_light() + 
     facet_wrap(~paste0("Quantile level: ",level)) +
-    theme(legend.position = "bottom", strip.background = element_rect(fill = "white"), strip.text = element_text(colour = "black"))
+    theme(legend.position = "bottom", axis.title = element_text(size = 8), strip.background = element_rect(fill = "white"), strip.text = element_text(colour = "black"))
   
   robustness_experiment_a02_plot <- p2
   
@@ -348,7 +351,7 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
       p3 = p0 + geom_line(aes(x=x, y=y), data = thisData, linewidth = 0.75) + 
         scale_y_continuous(limits = c(0,4.5)) + 
         geom_text(data = explications, aes(x=x, y=y, label = lab), size = 2.5, hjust = 1) + 
-        ggtitle(paste0("Scenario #",k," for ",folders[i],"% of points")) + 
+        ggtitle(paste0("Robustness scenario #",k," for ",folders[i],"% of points")) + 
         xlab("r") + ylab("PCF value")
       p_combine = grid.arrange(p3,p1,ncol = 2)
 

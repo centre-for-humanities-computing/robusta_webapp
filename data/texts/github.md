@@ -1,0 +1,1 @@
+The code for this web-app has been developed by Niels Aalund Krogsgaard, Centre for Humanities Computing and can be found at <a href="https://github.com/centre-for-humanities-computing/robusta_webapp" target="_blank">GitHub</a>.

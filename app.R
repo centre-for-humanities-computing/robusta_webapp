@@ -9,15 +9,11 @@ library(bslib)
 source("R/utils_Rdata.R")
 options(shiny.r.port = 8050)
 library(zip)
+library(shinyjs)
+library(markdown)
 
 # loading the text for showing in the server
 name_text <- paste(readLines("data/texts/name.txt"), collapse = "\n")
-introduction_text <- paste(readLines("data/texts/introduction.txt"), collapse = "\n")
-method_text <- paste(readLines("data/texts/method.txt"), collapse = "\n")
-results_text <- paste(readLines("data/texts/results.txt"), collapse = "\n")
-creators_text <- paste(readLines("data/texts/creators.txt"), collapse = "\n")
-contact_text <- paste(readLines("data/texts/contact.txt"), collapse = "\n")
-funding_text <- paste(readLines("data/texts/funding_information.txt"), collapse = "\n")
 
 ui <- fluidPage(
   theme = bslib::bs_theme(version = 5, bootswatch = "flatly"),
@@ -25,6 +21,7 @@ ui <- fluidPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
   ),
+  useShinyjs(), # for toggling download button on and off
   sidebarLayout(
     sidebarPanel(id = "sidebar_id",
       h3("Settings", style = "text-align: center; margin: 20px 0px 40px 0px"),
@@ -63,7 +60,7 @@ ui <- fluidPage(
           div(
             style = "position: fixed; bottom: 2%; left: 8.5%; width: 4%; text-align: center;",
             a(
-              href = "https://osf.io/u2gyq/",
+              href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743",
               icon("paperclip", "fa-2x"),
               target = "_blank",
               style = "color: #0B1215;"
@@ -116,21 +113,28 @@ ui <- fluidPage(
                  fluidPage(
                    uiOutput("test"),
                    h3(name_text),
-                   p(introduction_text),
+                   includeText("data/texts/introduction.txt"),
+                   HTML("<br><br>"),
                    h4("Methods"),
-                   p(method_text),
+                   includeText("data/texts/method.txt"),
+                   HTML("<br><br>"),
                    h4("How-to"),
-                   p("How-to: To make it work, a range of files have to be uploaded. These are the vector files and the spatial polygon files. Vector files should be one each of the types: .cpg, .dbf, .prj, .qmd, .shp, and .shx...
-                     Furthermore the number of Monte Carlo simulations, number of iterations, and number of robustness scenarios should be specified. Recommended values is in the range of XXX. More will be better, but above XXX will not change much"),
-                   p("IMPORTANT: The calculations will take some time. Increasing the size of the free parameters can significantly increase processing time. A progress bar will show, how far you are. Due to the large processing time, we recommend downloading the results, if you would like to return to it."),
+                   includeText("data/texts/how_to.txt"),
+                   HTML("<br><br>"),
+                   includeText("data/texts/how_to_2.txt"),
+                   HTML("<br><br>"),
                    h4("Results"),
-                   p(results_text),
+                   includeText("data/texts/results.txt"),
+                   HTML("<br><br>"),
                    h4("Creators"),
-                   p(creators_text),
+                   includeText("data/texts/creators.txt"),
+                   HTML("<br><br>"),
                    h4("Contact"),
-                   p(contact_text),
+                   includeMarkdown("data/texts/contact.md"),
+                   HTML("<br><br>"),
                    h4("Funding Information"),
-                   p(funding_text)
+                   includeText("data/texts/funding_information.txt"),
+                   HTML("<br><br>"),
                    )
         ),
         tabPanel("Output",
@@ -139,7 +143,7 @@ ui <- fluidPage(
                    h3(name_text),
                    HTML("<br>"),
                    tabsetPanel(
-                     tabPanel("Original PCF",
+                     tabPanel("PCF based on 100% of sites",
                               uiOutput("pcf_original_conditional")
                               ), 
                      tabPanel("Robustness PCF",
@@ -155,16 +159,17 @@ ui <- fluidPage(
                  hr(style = "margin: 0px 0px 20px 0px"),
                  fluidPage(
                    h3(name_text),
-                   h4("How to interpret the results"),
-                   p("something something..."),
+                   HTML("<br>"),
+                   h4("Original data"),
+                   includeMarkdown("data/texts/original_data.md"),
+                   h4("Original paper"),
+                   includeMarkdown("data/texts/original_paper.md"),
                    h4("Suggestions for further exploration"),
-                   p("References, links, resources, whatever. Could be papers, could be youtube"),
-                   h4("Original data source???"),
-                   p("don't know what this is"),
-                   h4("Original paper stuff??"),
-                   p("also not sure"),
+                   includeMarkdown("data/texts/suggestions.md"),
+                   h4("Code repository"),
+                   includeMarkdown("data/texts/github.md"),
                  ),
-        ),
+        ), selected = "Home", id = "main_tab"
       ), width = 10
     )
   ),
@@ -211,7 +216,11 @@ server <- function(input, output, session) {
                         # quantile_50 = input$quantile_50_test || input$quantile_50_upload)
 
     function_ran(TRUE)
-    
+
+    updateTabsetPanel(session, "main_tab",
+      selected = "Output"
+    )
+
     })
     
   
@@ -270,6 +279,10 @@ server <- function(input, output, session) {
                          quantile_50 = TRUE)
 
     function_ran(TRUE)
+
+    updateTabsetPanel(session, "main_tab",
+      selected = "Output"
+    )
   })
     
 output$plot_100_1 <- renderPlot({
@@ -308,14 +321,14 @@ output$plot_100_1 <- renderPlot({
   output$plot_compare <- renderPlot({
       grid.draw(data_output$data[[3]])
     }, res = 130)
-  
+
   # Dynamically update the content of the tabPanel based on whether the function has run
   output$pcf_original_conditional <- renderUI({
     # Wait until the function has run
     if (function_ran()) {
       tagList(
         HTML("<br>"),
-        h4("Original PCF"),
+        h4("Pair Correlation Function based on 100% of sites"),
         HTML("<br>"),
         plotOutput("plot_100_1", width = "100%")
       )
@@ -338,36 +351,42 @@ output$plot_100_1 <- renderPlot({
         HTML("<br>"),
         h4("Robustness PCF"),
         HTML("<br>"),
+        p("Only two randonmly sampled robustness scenarios are shown here. The rest can be downloaded by clicking the download button."),
         tabsetPanel(
-            tabPanel("50% of points",
+            tabPanel("90% of points",
             HTML("<br>"),
-            plotOutput("plot_50_1", width = "100%"),
+            plotOutput("plot_90_1", width = "100%"),
             HTML("<br><br>"),
-            plotOutput("plot_50_2", width = "100%")
-            ),
-            tabPanel("60% of points",
-            HTML("<br>"),
-            plotOutput("plot_60_1", width = "100%"),
-            HTML("<br><br>"),
-            plotOutput("plot_60_2", width = "100%")
-            ),
-            tabPanel("70% of points",
-            HTML("<br>"),
-            plotOutput("plot_70_1", width = "100%"),
-            HTML("<br><br>"),
-            plotOutput("plot_70_2", width = "100%")
+            plotOutput("plot_90_2", width = "100%"),
+            HTML("<br><br>")
             ),
             tabPanel("80% of points",
             HTML("<br>"),
             plotOutput("plot_80_1", width = "100%"),
             HTML("<br><br>"),
-            plotOutput("plot_80_2", width = "100%")
+            plotOutput("plot_80_2", width = "100%"),
+            HTML("<br><br>")
             ),
-            tabPanel("90% of points",
+            tabPanel("70% of points",
             HTML("<br>"),
-            plotOutput("plot_90_1", width = "100%"),
+            plotOutput("plot_70_1", width = "100%"),
             HTML("<br><br>"),
-            plotOutput("plot_90_2", width = "100%")
+            plotOutput("plot_70_2", width = "100%"),
+            HTML("<br><br>")
+            ),
+            tabPanel("60% of points",
+            HTML("<br>"),
+            plotOutput("plot_60_1", width = "100%"),
+            HTML("<br><br>"),
+            plotOutput("plot_60_2", width = "100%"),
+            HTML("<br><br>")
+            ),
+            tabPanel("50% of points",
+            HTML("<br>"),
+            plotOutput("plot_50_1", width = "100%"),
+            HTML("<br><br>"),
+            plotOutput("plot_50_2", width = "100%"),
+            HTML("<br><br>")
             )
         )
       )
@@ -404,6 +423,15 @@ output$plot_100_1 <- renderPlot({
     
   })
   
+  observe({
+      toggleState("download1", !is.null(data_output$data))
+      toggleClass("download1", "btn-success", !is.null(data_output$data))
+    })
+  
+  observe({
+      toggleState("download2", !is.null(data_output$data))
+      toggleClass("download2", "btn-success", !is.null(data_output$data))
+    })
   
   # Create the download handler for the folder
   output$download1 <- downloadHandler(
