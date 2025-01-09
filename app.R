@@ -45,26 +45,27 @@ ui <- fluidPage(
               checkboxInput("quantile_995_test", "99.5% quantile", FALSE),
             ), open = FALSE
           ),
-          div(actionButton("submit_button_1", "Submit", class = "btn-success"), id = "div_submit_button"),
-          div(downloadButton("download1"), id = "div_download_button"),
-          div(
-            style = "position: fixed; bottom: 2%; left: 2.5%; width: 4%; text-align: center;",
-            a(
-              href = "https://github.com/centre-for-humanities-computing/robusta_webapp",
-              icon("github", "fa-2x"),
-              target = "_blank",
-              style = "color: #0B1215;"
+          HTML("<br><br>"),
+          splitLayout(cellWidths = c("50%", "50%"), 
+            div(actionButton("submit_button_1", "Submit", class = "btn-success"), id = "div_submit_button"),
+            div(downloadButton("download1"), id = "div_download_button")),
+          HTML("<br><br><br>"),
+            splitLayout(cellWidths = c("50%", "50%"),
+              div(a(
+                href = "https://github.com/centre-for-humanities-computing/robusta_webapp",
+                icon("github", "fa-2x"),
+                target = "_blank",
+                style = "color: #0B1215; margin-left: 40%"
+                )
+              ),
+              div(a(
+                href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743",
+                icon("paperclip", "fa-2x"),
+                target = "_blank",
+                style = "color: #0B1215; margin-left: 40%"
+                )
+              )
             )
-          ),
-          div(
-            style = "position: fixed; bottom: 2%; left: 8.5%; width: 4%; text-align: center;",
-            a(
-              href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743",
-              icon("paperclip", "fa-2x"),
-              target = "_blank",
-              style = "color: #0B1215;"
-            )
-          )
         )
         ),
         tabPanel("Upload",
@@ -77,11 +78,17 @@ ui <- fluidPage(
                   As a minimum you need to upload a .shp and a .shx file.
                 </div>
               </span>'
-            ), accept = c(".shp", ".cpg", ".dbf", ".prj", ".qmd", ".shx"), multiple = TRUE),
+            ), accept = c(".shp", ".shx"), multiple = TRUE),
             br(),
-            fileInput("upload2", label = "Upload Spatial Polygons", accept = c(".shp", ".cpg", ".dbf", ".prj", ".sbn", ".sbx", ".shx"), multiple = TRUE),
+            fileInput("upload2", label = HTML(
+              'Upload Spatial Polygons
+              <span class="info-icon">&#9432;
+                <div class="hoverbox">
+                  As a minimum you need to upload a .shp and a .shx file.
+                </div>
+              </span>'), accept = c(".shp", ".shx"), multiple = TRUE),
             br(),
-            numericInput("mc_simulations_2", label = "Number of CSR simulations", value = 25, min = 1, max = 10000),
+            numericInput("mc_simulations_2", label = "Number of Monte Carlo simulations", value = 25, min = 1, max = 10000),
             br(),
             numericInput("nbRobSc_2", label = "Number of Robustness Scenarios", value = 10, min = 1, max = 10000),
             br(),
@@ -97,8 +104,27 @@ ui <- fluidPage(
                 checkboxInput("quantile_995_upload", "99.5% quantile", FALSE),
               ), open = FALSE
             ),
-            div(actionButton("submit_button_2", "Submit", class = "btn-success"), id = "div_submit_button"),
-            div(downloadButton("download2"), id = "div_download_button"),
+            HTML("<br><br>"),
+            splitLayout(cellWidths = c("50%", "50%"), 
+              div(actionButton("submit_button_2", "Submit", class = "btn-success"), id = "div_submit_button"),
+              div(downloadButton("download2"), id = "div_download_button")),
+            HTML("<br><br><br>"),
+            splitLayout(cellWidths = c("50%", "50%"),
+              div(a(
+                href = "https://github.com/centre-for-humanities-computing/robusta_webapp",
+                icon("github", "fa-2x"),
+                target = "_blank",
+                style = "color: #0B1215; margin-left: 40%"
+                )
+              ),
+              div(a(
+                href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743",
+                icon("paperclip", "fa-2x"),
+                target = "_blank",
+                style = "color: #0B1215; margin-left: 40%"
+                )
+              )
+            )
           )
         ),
       ),
@@ -106,35 +132,33 @@ ui <- fluidPage(
       style="font-size:20px;"
     ),
     mainPanel(
-      navbarPage("",
+      navbarPage(title = "", id = "main_tab",
         tabPanel("Home",
                  hr(style = "margin: 0px 20px 20px 0px"),
                  fluidPage(
                    uiOutput("test"),
                    h3(name_text),
-                   includeText("data/texts/introduction.txt"),
-                   HTML("<br><br>"),
+                   includeMarkdown("data/texts/introduction.md"),
+                  #  HTML("<br>"),
                    h4("Methods"),
-                   includeText("data/texts/method.txt"),
-                   HTML("<br><br>"),
+                   includeMarkdown("data/texts/method.md"),
+                  #  HTML("<br><br>"),
                    h4("How-to"),
-                   includeText("data/texts/how_to.txt"),
-                   HTML("<br><br>"),
-                   includeText("data/texts/how_to_2.txt"),
-                   HTML("<br><br>"),
+                   includeMarkdown("data/texts/how_to.md"),
+                  #  HTML("<br><br>"),
                    h4("Results"),
-                   includeText("data/texts/results.txt"),
-                   HTML("<br><br>"),
+                   includeMarkdown("data/texts/results.md"),
+                  #  HTML("<br><br>"),
                    h4("Creators"),
-                   includeText("data/texts/creators.txt"),
-                   HTML("<br><br>"),
+                   includeMarkdown("data/texts/creators.md"),
+                  #  HTML("<br><br>"),
                    h4("Contact"),
                    includeMarkdown("data/texts/contact.md"),
-                   HTML("<br><br>"),
+                  #  HTML("<br><br>"),
                    h4("Funding Information"),
-                   includeText("data/texts/funding_information.txt"),
-                   HTML("<br><br>"),
-                   )
+                   includeMarkdown("data/texts/funding_information.md"),
+                  #  HTML("<br><br>"),
+                   id = "home_page")
         ),
         tabPanel("Output",
                  hr(style = "margin: 0px 0px 20px 0px"),
@@ -152,7 +176,7 @@ ui <- fluidPage(
                               uiOutput("comparison_tools_conditional")
                               )
                      ),
-                 ),
+                 id = "home_page"),
         ),
         tabPanel("More Info",
                  hr(style = "margin: 0px 0px 20px 0px"),
@@ -167,8 +191,8 @@ ui <- fluidPage(
                    includeMarkdown("data/texts/suggestions.md"),
                    h4("Code repository"),
                    includeMarkdown("data/texts/github.md"),
-                 ),
-        ), selected = "Home", id = "main_tab"
+                 id = "home_page"),
+        ), selected = "Home"
       ), width = 10
     )
   ),
@@ -282,7 +306,7 @@ server <- function(input, output, session) {
                          quantiles = quantiles,
                          quantile_50 = TRUE)
 
-    if(data_output$data == NULL){
+    if(is.null(data_output$data)){
       function_error(TRUE)
     } else {
        function_ran(TRUE)

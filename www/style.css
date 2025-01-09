@@ -1,11 +1,12 @@
 /* Adjust the sidebar to fill the full height of the viewport */
-      .sidebar, .well {
-        height: 100vh;
-        overflow-y: auto; /* Add scroll to the sidebar if content overflows */
-        margin-left: 0; /* Remove left margin */
-        border-radius: 0; /* Remove rounded corners */
-      }
       /* Custom CSS for titlePanel size */
+      #sidebar_id {
+        /* background-color: aquamarine; */
+        position: fixed;
+        height: 100vh;
+        width: 16.66667%;
+        overflow-y: scroll;
+      }
       .title {
         height: 10vh;
         overflow: hidden; /* Prevent overflow if the title is too large */
@@ -65,7 +66,10 @@
         font-size: 16px;
         margin-left: 3px; /* Add horizontal space */
       }
-
+      #home_page {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
       .hoverbox {
         visibility: hidden;
         width: 200px;
@@ -97,23 +101,14 @@
       .info-icon:hover .hoverbox {
         visibility: visible;
       }
-      #sidebar_id {
-        background-color: #f9f9f9;
-      }
       #div_submit_button {
-        margin: 0;
-        position: absolute;
-        left: 25%;
-        bottom: 10%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       #div_download_button {
-        margin: 0;
-        position: absolute;
-        right: 0%;
-        bottom: 10%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
