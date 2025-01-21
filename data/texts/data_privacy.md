@@ -1,0 +1,1 @@
+No data or results are saved permanently on the server. Everything is only kept momentarily, and will be deleted upon refreshing the browser. The web app is hosted on Aarhus University servers located in Denmark.

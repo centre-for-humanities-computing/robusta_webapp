@@ -422,6 +422,8 @@ original_pcf_function <- function(sp_unmark, nsim, quantiles){
 }
 
 big_processing_func <- function(file_shp, file_poly, nsim, clusters, nbRobSc, quantiles, quantile_50){
+  pdf(file = NULL)
+  
   withProgress(message = 'Processing Data', value = 0, {
     
     incprogress_number <- 1/6

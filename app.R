@@ -29,11 +29,29 @@ ui <- fluidPage(
         hr(style = "margin: 0px 20px 20px 0px"),
         fluidPage(
           p("Simulations with Montecristi Dataset"),
-          numericInput("mc_simulations_1", label = "Number of Monte Carlo simulations", value = 25, min = 1, max = 10000),
+          numericInput("mc_simulations_1", label = HTML(
+              'Number of Monte Carlo simulations
+              <span class="info-icon">&#9432;
+                <div class="hoverbox">
+                  Number of simulationes can be anything, but we recommend between 1000-5000. Beware, values below 25 can cause the processing to fail.
+                </div>
+              </span>'), value = 25, min = 1, max = 10000),
           br(),
-          numericInput("nbRobSc_1", label = "Number of Robustness Scenarios", value = 5, min = 1, max = 10000),
+          numericInput("nbRobSc_1", label = HTML(
+              'Number of Robustness Scenarios
+              <span class="info-icon">&#9432;
+                <div class="hoverbox">
+                  Number of robustness scenarios can be anything, but we recommend between 100-3000.
+                </div>
+              </span>'), value = 5, min = 1, max = 10000),
           br(),
-          p("Quantile Selection"),
+          HTML(
+              'Quantile Selection
+              <span class="info-icon">&#9432;
+                <div class="hoverbox">
+                  The most comprehensive comparison is achieved by using all options, but the processing is faster with fewer options.
+                </div>
+              </span>'),
           accordion(
             accordion_panel("Expand for options",
               # checkboxInput("quantile_50_test", "50% quantile", FALSE),
@@ -75,7 +93,7 @@ ui <- fluidPage(
               'Upload Spatial Points
               <span class="info-icon">&#9432;
                 <div class="hoverbox">
-                  As a minimum you need to upload a .shp and a .shx file.
+                  Upload a .shp and a .shx file.
                 </div>
               </span>'
             ), accept = c(".shp", ".shx"), multiple = TRUE),
@@ -84,15 +102,33 @@ ui <- fluidPage(
               'Upload Spatial Polygons
               <span class="info-icon">&#9432;
                 <div class="hoverbox">
-                  As a minimum you need to upload a .shp and a .shx file.
+                  Upload a .shp and a .shx file.
                 </div>
               </span>'), accept = c(".shp", ".shx"), multiple = TRUE),
             br(),
-            numericInput("mc_simulations_2", label = "Number of Monte Carlo simulations", value = 25, min = 1, max = 10000),
+            numericInput("mc_simulations_2", label = HTML(
+              'Number of Monte Carlo simulations
+              <span class="info-icon">&#9432;
+                <div class="hoverbox">
+                  Number of simulationes can be anything, but we recommend between 1000-5000. Beware, values below 25 can cause the processing to fail.
+                </div>
+              </span>'), value = 25, min = 1, max = 10000),
             br(),
-            numericInput("nbRobSc_2", label = "Number of Robustness Scenarios", value = 10, min = 1, max = 10000),
+            numericInput("nbRobSc_2", label = HTML(
+              'Number of Robustness Scenarios
+              <span class="info-icon">&#9432;
+                <div class="hoverbox">
+                  Number of robustness scenarios can be anything, but we recommend between 100-3000.
+                </div>
+              </span>'), value = 10, min = 1, max = 10000),
             br(),
-            p("Quantile Selection"),
+            HTML(
+              'Quantile Selection
+              <span class="info-icon">&#9432;
+                <div class="hoverbox">
+                  The most comprehensive comparison is achieved by using all options, but the processing is faster with fewer options.
+                </div>
+              </span>'),
             accordion(
               accordion_panel("Expand for options",
                 # checkboxInput("quantile_50_upload", "50% quantile", FALSE),
@@ -157,6 +193,27 @@ ui <- fluidPage(
                   #  HTML("<br><br>"),
                    h4("Funding Information"),
                    includeMarkdown("data/texts/funding_information.md"),
+                   HTML("<br><br>"),
+                   splitLayout(cellWidths = c("33%", "33%", "34%"),
+                    div(a(
+                      href = "https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe_en",
+                      img(src = "images/Funded-by-the-European-Union.png", width = "90%"),
+                      target = "_blank"
+                      )
+                    ),
+                    div(a(
+                      href = "https://marie-sklodowska-curie-actions.ec.europa.eu/",
+                      img(src = "images/logo_marie-curie.jpg", width = "50%", style = "margin-left: 20%"),
+                      target = "_blank"
+                      )
+                    ),
+                    div(a(
+                      href = "https://international.au.dk/",
+                      img(src = "images/aarhus-university-au-3-logo.png", width = "90%"),
+                      target = "_blank"
+                      )
+                    )
+                  ),
                   #  HTML("<br><br>"),
                    id = "home_page")
         ),
@@ -191,6 +248,8 @@ ui <- fluidPage(
                    includeMarkdown("data/texts/suggestions.md"),
                    h4("Code repository"),
                    includeMarkdown("data/texts/github.md"),
+                   h4("Data privacy"),
+                   includeMarkdown("data/texts/data_privacy.md"),
                  id = "home_page"),
         ), selected = "Home"
       ), width = 10
@@ -209,25 +268,28 @@ server <- function(input, output, session) {
   
   # Observer to start function processing
   observeEvent(input$submit_button_1, {
+    shinyjs::disable("submit_button_1")
+    shinyjs::disable("submit_button_2")
+    
     function_error(FALSE)
 
     file_shp <- readOGR("data/montecristi/mc-db-95-clean.shp")
     file_poly <- readOGR("data/montecristi/nmcpoly1.shp")
     
     quantiles <- c()
-    if (input$quantile_90_test || input$quantile_90_upload){
+    if (input$quantile_90_test){
       quantiles <- c(quantiles, 0.9)
     }
-    if (input$quantile_95_test || input$quantile_95_upload){
+    if (input$quantile_95_test){
       quantiles <- c(quantiles, 0.95)
     }
-    if (input$quantile_98_test || input$quantile_98_upload){
+    if (input$quantile_98_test){
       quantiles <- c(quantiles, 0.98)
     }
-    if (input$quantile_99_test || input$quantile_99_upload){
+    if (input$quantile_99_test){
       quantiles <- c(quantiles, 0.99)
     }
-    if (input$quantile_995_test || input$quantile_995_upload){
+    if (input$quantile_995_test){
       quantiles <- c(quantiles, 0.995)
     }
     
@@ -248,6 +310,9 @@ server <- function(input, output, session) {
     updateTabsetPanel(session, "main_tab",
       selected = "Output"
     )
+    
+    shinyjs::enable("submit_button_1")
+    shinyjs::enable("submit_button_2")
 
     })
     
@@ -255,6 +320,9 @@ server <- function(input, output, session) {
 
   # Observer to start function processing
   observeEvent(input$submit_button_2, {
+
+    shinyjs::disable("submit_button_1")
+    shinyjs::disable("submit_button_2")
     
     shp_upload1 <- input$upload1
     shp_upload2 <- input$upload2
@@ -282,19 +350,19 @@ server <- function(input, output, session) {
     file_poly <- readOGR(paste(tempdirname_2, shp_upload2$name[grep(pattern = "*.shp$", shp_upload2$name)], sep = "/"))
     
     quantiles <- c()
-    if (input$quantile_90_test || input$quantile_90_upload){
+    if (input$quantile_90_upload){
       quantiles <- c(quantiles, 0.9)
     }
-    if (input$quantile_95_test || input$quantile_95_upload){
+    if (input$quantile_95_upload){
       quantiles <- c(quantiles, 0.95)
     }
-    if (input$quantile_98_test || input$quantile_98_upload){
+    if (input$quantile_98_upload){
       quantiles <- c(quantiles, 0.98)
     }
-    if (input$quantile_99_test || input$quantile_99_upload){
+    if (input$quantile_99_upload){
       quantiles <- c(quantiles, 0.99)
     }
-    if (input$quantile_995_test || input$quantile_995_upload){
+    if (input$quantile_995_upload){
       quantiles <- c(quantiles, 0.995)
     }
 
@@ -315,6 +383,9 @@ server <- function(input, output, session) {
     updateTabsetPanel(session, "main_tab",
       selected = "Output"
     )
+
+    shinyjs::enable("submit_button_1")
+    shinyjs::enable("submit_button_2")
   })
     
 output$plot_100_1 <- renderPlot({
