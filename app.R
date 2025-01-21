@@ -265,11 +265,15 @@ server <- function(input, output, session) {
 
   # object to hold output from the function
   data_output <- reactiveValues(data = NULL)
+  shinyjs::disable("download1")
+  shinyjs::disable("download2")
   
   # Observer to start function processing
   observeEvent(input$submit_button_1, {
     shinyjs::disable("submit_button_1")
     shinyjs::disable("submit_button_2")
+    shinyjs::disable("download1")
+    shinyjs::disable("download2")
     
     function_error(FALSE)
 
@@ -313,6 +317,7 @@ server <- function(input, output, session) {
     
     shinyjs::enable("submit_button_1")
     shinyjs::enable("submit_button_2")
+    shinyjs::enable("download1")
 
     })
     
@@ -323,6 +328,8 @@ server <- function(input, output, session) {
 
     shinyjs::disable("submit_button_1")
     shinyjs::disable("submit_button_2")
+    shinyjs::disable("download1")
+    shinyjs::disable("download2")
     
     shp_upload1 <- input$upload1
     shp_upload2 <- input$upload2
@@ -386,6 +393,7 @@ server <- function(input, output, session) {
 
     shinyjs::enable("submit_button_1")
     shinyjs::enable("submit_button_2")
+    shinyjs::enable("download2")
   })
     
 output$plot_100_1 <- renderPlot({
@@ -551,12 +559,12 @@ output$plot_100_1 <- renderPlot({
   })
   
   observe({
-      toggleState("download1", !is.null(data_output$data))
+      # toggleState("download1", !is.null(data_output$data))
       toggleClass("download1", "btn-success", !is.null(data_output$data))
     })
   
   observe({
-      toggleState("download2", !is.null(data_output$data))
+      # toggleState("download2", !is.null(data_output$data))
       toggleClass("download2", "btn-success", !is.null(data_output$data))
     })
   
