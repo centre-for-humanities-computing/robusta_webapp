@@ -66,7 +66,7 @@ ui <- fluidPage(
           HTML("<br><br>"),
           splitLayout(cellWidths = c("50%", "50%"), 
             div(actionButton("submit_button_1", "Submit", class = "btn-success"), id = "div_submit_button"),
-            div(downloadButton("download1"), id = "div_download_button")),
+            div(disabled(downloadButton("download1")), id = "div_download_button")),
           HTML("<br><br><br>"),
             splitLayout(cellWidths = c("50%", "50%"),
               div(a(
@@ -143,7 +143,7 @@ ui <- fluidPage(
             HTML("<br><br>"),
             splitLayout(cellWidths = c("50%", "50%"), 
               div(actionButton("submit_button_2", "Submit", class = "btn-success"), id = "div_submit_button"),
-              div(downloadButton("download2"), id = "div_download_button")),
+              div(disabled(downloadButton("download2")), id = "div_download_button")),
             HTML("<br><br><br>"),
             splitLayout(cellWidths = c("50%", "50%"),
               div(a(
@@ -265,8 +265,6 @@ server <- function(input, output, session) {
 
   # object to hold output from the function
   data_output <- reactiveValues(data = NULL)
-  shinyjs::disable("download1")
-  shinyjs::disable("download2")
   
   # Observer to start function processing
   observeEvent(input$submit_button_1, {
