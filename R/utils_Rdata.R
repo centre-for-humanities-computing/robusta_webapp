@@ -1,6 +1,6 @@
 require(spatstat)
-require(rgdal) # change to sf/stars/terra after 2023
-require(maptools)
+require(sf) # change to sf/stars/terra after 2023
+require(terra)
 require(doParallel)
 require(foreach)
 require(tidyverse)

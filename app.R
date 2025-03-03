@@ -2,7 +2,7 @@
 # https://mastering-shiny.org/action-dynamic.html
 
 library(shiny)
-library(rgdal)
+library(sf)
 library(grid)
 library(gridExtra)
 library(bslib)
@@ -275,8 +275,8 @@ server <- function(input, output, session) {
     
     function_error(FALSE)
 
-    file_shp <- readOGR("data/montecristi/mc-db-95-clean.shp")
-    file_poly <- readOGR("data/montecristi/nmcpoly1.shp")
+    file_shp <- st_read("data/montecristi/mc-db-95-clean.shp")
+    file_poly <- st_read("data/montecristi/nmcpoly1.shp")
     
     quantiles <- c()
     if (input$quantile_90_test){
@@ -351,8 +351,8 @@ server <- function(input, output, session) {
       )
     }
     
-    file_shp <- readOGR(paste(tempdirname_1, shp_upload1$name[grep(pattern = "*.shp$", shp_upload1$name)], sep = "/"))
-    file_poly <- readOGR(paste(tempdirname_2, shp_upload2$name[grep(pattern = "*.shp$", shp_upload2$name)], sep = "/"))
+    file_shp <- st_read(paste(tempdirname_1, shp_upload1$name[grep(pattern = "*.shp$", shp_upload1$name)], sep = "/"))
+    file_poly <- st_read(paste(tempdirname_2, shp_upload2$name[grep(pattern = "*.shp$", shp_upload2$name)], sep = "/"))
     
     quantiles <- c()
     if (input$quantile_90_upload){
