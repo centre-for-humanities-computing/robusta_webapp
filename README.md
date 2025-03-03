@@ -23,11 +23,15 @@ To use Robusta, you need the following software installed on your system:
    ```bash
    git clone https://github.com/centre-for-humanities-computing/robusta_webapp.git
    ```
+
 2. Open the project in RStudio or your preferred R environment.
+
 3. Install required dependencies by running the following in your R console:
    ```R
    install.packages(c("x"))
    ```
+   Note that this step is made significantly simpler in RStudio, where the user is invited to install relevant pacakges simply by clicking "Run All".
+
 4. Run the application by sourcing the main script:
    ```R
    source("robusta_main.R")
