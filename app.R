@@ -1,6 +1,5 @@
 # guides
 # https://mastering-shiny.org/action-dynamic.html
-
 library(shiny)
 library(sf)
 library(grid)
@@ -446,7 +445,7 @@ output$plot_100_1 <- renderPlot({
         class = "center-content",  # Wrapper to center content
         div(
           class = "error-message",  # Custom error styling
-          "An error occured, and is likely due to low number of Monte Carlo simulations. Try running it again or increase number of simulations to at least 25."
+          "An error occured, and is likely due either a too low or too high number of Monte Carlo simulations. Try running it again with a number of simluations between 25 and 10.000"
         )
       )
     } else {
