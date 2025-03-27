@@ -243,8 +243,6 @@ ui <- fluidPage(
                    includeMarkdown("data/texts/original_data.md"),
                    h4("Original paper"),
                    includeMarkdown("data/texts/original_paper.md"),
-                   h4("Suggestions for further exploration"),
-                   includeMarkdown("data/texts/suggestions.md"),
                    h4("Code repository"),
                    includeMarkdown("data/texts/github.md"),
                    h4("Data privacy"),

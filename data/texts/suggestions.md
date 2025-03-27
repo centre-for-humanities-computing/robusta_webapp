@@ -1,1 +1,0 @@
-For further research into the topic of spatial analysis, the authors recommend the following resources:
