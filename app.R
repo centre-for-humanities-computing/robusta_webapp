@@ -1,9 +1,14 @@
 # guides
 # https://mastering-shiny.org/action-dynamic.html
-# install.packages("pacman")
-pacman::p_load(shiny,sf,grid,gridExtra,bslib,zip,shinyjs,markdown)
-
+library(shiny)
+library(sf)
+library(grid)
+library(gridExtra)
+library(bslib)
 source("R/utils_Rdata.R")
+library(zip)
+library(shinyjs)
+library(markdown)
 
 # loading the text for showing in the server
 name_text <- paste(readLines("data/texts/name.txt"), collapse = "\n")
