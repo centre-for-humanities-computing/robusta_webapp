@@ -32,7 +32,7 @@ ui <- fluidPage(
               'Number of Monte Carlo simulations
               <span class="info-icon">&#9432;
                 <div class="hoverbox">
-                  Number of simulationes can be anything, but we recommend between 1000-5000. Beware, values below 25 can cause the processing to fail.
+                  Number of simulationes can be anything, but we recommend between 1000-5000. Beware, values below 25 and above 10.000 can cause the processing to fail.
                 </div>
               </span>'), value = 25, min = 1, max = 10000),
           br(),
@@ -196,19 +196,19 @@ ui <- fluidPage(
                    splitLayout(cellWidths = c("33%", "33%", "34%"),
                     div(a(
                       href = "https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe_en",
-                      img(src = "images/Funded-by-the-European-Union.png", width = "90%"),
+                      img(src = "images/Funded-by-the-European-Union.png", width = "70%"),
                       target = "_blank"
                       )
                     ),
                     div(a(
                       href = "https://marie-sklodowska-curie-actions.ec.europa.eu/",
-                      img(src = "images/logo_marie-curie.jpg", width = "50%", style = "margin-left: 20%"),
+                      img(src = "images/logo_marie-curie.jpg", width = "30%", style = "margin-left: 20%"),
                       target = "_blank"
                       )
                     ),
                     div(a(
                       href = "https://international.au.dk/",
-                      img(src = "images/aarhus-university-au-3-logo.png", width = "90%"),
+                      img(src = "images/aarhus-university-au-3-logo.png", width = "70%"),
                       target = "_blank"
                       )
                     )

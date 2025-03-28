@@ -1,1 +1,1 @@
-This web app was created by Niels Aalund Krogsgaard (nakro@cas.au.dk) from the Centre for Humanities Computing (Aarhus University) based on the research and codes by Eduardo Herrera Malatesta and Sébastien de Valeriola.
+This web app was created by Niels Aalund Krogsgaard and Mia Jacobsen (miaj@cas.au.dk) from the Centre for Humanities Computing (Aarhus University) based on the research and codes by Eduardo Herrera Malatesta and Sébastien de Valeriola.
