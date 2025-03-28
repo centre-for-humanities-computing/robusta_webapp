@@ -1,6 +1,6 @@
 # guides
 # https://mastering-shiny.org/action-dynamic.html
-install.packages("pacman")
+# install.packages("pacman")
 pacman::p_load(shiny,sf,grid,gridExtra,bslib,zip,shinyjs,markdown)
 
 source("R/utils_Rdata.R")
@@ -233,7 +233,7 @@ ui <- fluidPage(
                  fluidPage(
                    h3(name_text),
                    HTML("<br>"),
-                   h4("Methodology and framework"),
+                   h4("Framework and background"),
                    includeMarkdown("data/texts/method.md"),
                    id = "home_page"),
         ),

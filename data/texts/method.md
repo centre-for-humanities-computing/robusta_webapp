@@ -7,15 +7,18 @@ To achieve this, we have articulated the discussion on the reconstruction of pas
 3) the consideration of robustness.
 
 The framework and subsequently this app are designed to aid archaeologists working with datasets that are known to contain sources of uncertainty in applying
-spatial statistical methods and achieve a higher understanding of the uncertainties of the resulting models. It consists of three simple steps. 
+spatial statistical methods and achieve a higher understanding of the uncertainties of the resulting models. 
 
-**Step 1**
+#### Methodology
+The framework itself consists of three simple steps: 
+
+**Step 1 - The Observable**
 
 The first step is defined as "the observable” which is a point clustering metric whose changes are tracked and measured when considering deviations. 
 In this case, this is the model resulting from a Pair Correlation Function (PCF) with a Monte Carlo simulation envelope based on 100% of the dataset used as input. 
 The app will provide the result of "the observable "which will be used as a reference value for the second step.
 
-**Step 2**
+**Step 2 - The Experiment**
 
 The second step is "the experiment" where regular intervals of data will be sampled from the loaded dataset. 
 More precisely, the app will deduct 10%, 20%, 30%, 40%, and 50% of the database’s sites and perform the PCF again with a Monte 
@@ -26,7 +29,7 @@ To make the app work optimally, only the sampling via the uniform distribution i
 If a more experienced researcher would like to access the code and consider the inhomogeneous distribution, 
 please check out the original code <a href="https://osf.io/u2gyq/" target="_blank">here</a>.
 
-**Step 3**
+**Step 3 - Comparison Tools**
 
 The third step consist of the "comparison tools", which are methods to assess the frequencies and interval midpoint densities. 
 The comparison tools is the step that will allow the analyst to assess the robustness and quantify the uncertainty of the spatial models created based on their dataset. 
