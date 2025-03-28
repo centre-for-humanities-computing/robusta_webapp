@@ -14,3 +14,4 @@ The framework that will be presented is designed to aid archaeologists working w
 spatial statistical methods and achieve a higher understanding of the uncertainties of the resulting models.
 
 In essence, Robusta aims to help colleagues who desire to better understand their models by quantifying their uncertainties. 
+For an in-depth description of the framework, see the tab **"Methods"**.
