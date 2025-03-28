@@ -1,4 +1,4 @@
-Robusta exists both as an interactive web app and as an open-source tool that can be run locally. The web app is primarily meant as a demo, and can become unstable when running bigger computations.
+Robusta exists both as an interactive web app and as an open-source tool that can be downloaded and run locally. The web app is primarily meant as a demo, and can become unstable when running bigger computations.
 We therefore recommend that users download the app if they want to play around with their own datasets and larger numbers of simulations, and only use the test dataset and a low number of simulations when using the web app. <br>
 *To download the app, go to [this GitHub repo](https://github.com/centre-for-humanities-computing/robusta_webapp).*
 
@@ -7,9 +7,12 @@ The Montecristo data is meant as a test dataset, where you can play a bit around
 
 **(Optional) Upload your own data**
 
-If you would like to work on your own data, choose the tab "Upload". Here, you have to upload the following shapefiles:
+When using your own data, the dataset should be in the shapefile format and consist of a series of georeferenced points, in addition to a georeferenced polygon of the research area.
+
+Choose the tab "Upload" and upload the following shapefiles:
 1. A vector file of the points to be analysed (e.g., sites, materials). You need to upload a .shp *and* a .shx file.
 2. A spatial polygon file of the research area. This also needs to consist of a .shp *and* a .shx file.
+
 
 **Choose number of simulations and scenarios**
 
