@@ -1,5 +1,3 @@
-*For the best experience in browser, we recommend zooming out to 75% or 80%.*
-
 Based on the paper by [Herrera Malatesta and de Valeriola (2024)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743), 
 this web app allows interested researchers in computational archaeology to reproduce the paper’s results and quantify the uncertainty on their own spatial datasets. 
 
