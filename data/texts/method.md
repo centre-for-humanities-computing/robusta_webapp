@@ -1,5 +1,13 @@
 This web app follows the framework proposed in [Herrera Malatesta and de Valeriola (2024)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743).
-This framework, called the ‘robustness assessing framework', is made up of three simple steps. 
+This framework, called the ‘robustness assessing framework', focuses on assessing the robustness and uncertainties of conclusions drawn from applying point pattern analysis to, mostly, 
+non-systematic regional data in archaeology. 
+To achieve this, we have articulated the discussion on the reconstruction of past landscapes using computational methods around three key aspects: 
+1) the use of point pattern analysis (PPA) in archaeology
+2) the quantification of uncertainties
+3) the consideration of robustness.
+
+The framework and subsequently this app are designed to aid archaeologists working with datasets that are known to contain sources of uncertainty in applying
+spatial statistical methods and achieve a higher understanding of the uncertainties of the resulting models. It consists of three simple steps. 
 
 **Step 1**
 

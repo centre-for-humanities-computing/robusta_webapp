@@ -178,7 +178,7 @@ ui <- fluidPage(
                    h4("Introduction"),
                    includeMarkdown("data/texts/introduction.md"),
                    HTML("<br>"),
-                   h4("How to use Robusta"),
+                   h4("How to use"),
                    includeMarkdown("data/texts/how_to.md"),
                    HTML("<br>"),
                    h4("Results"),
