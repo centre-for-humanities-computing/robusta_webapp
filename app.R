@@ -67,22 +67,6 @@ ui <- fluidPage(
             div(actionButton("submit_button_1", "Submit", class = "btn-success"), id = "div_submit_button"),
             div(disabled(downloadButton("download1")), id = "div_download_button")),
           HTML("<br><br><br>"),
-            splitLayout(cellWidths = c("50%", "50%"),
-              div(a(
-                href = "https://github.com/centre-for-humanities-computing/robusta_webapp",
-                icon("github", "fa-2x"),
-                target = "_blank",
-                style = "color: #0B1215; margin-left: 40%"
-                )
-              ),
-              div(a(
-                href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743",
-                icon("paperclip", "fa-2x"),
-                target = "_blank",
-                style = "color: #0B1215; margin-left: 40%"
-                )
-              )
-            )
         )
         ),
         tabPanel("Upload",
