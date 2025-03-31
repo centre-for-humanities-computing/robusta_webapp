@@ -9,14 +9,11 @@ Robusta is a web app implementing the ideas of Herrera Malatesta and de Valeriol
 ### Required Software
 To use Robusta, you need the following software installed on your system:
 
-1. **R** (Version 3.8 or later)
-   - [Download Python](https://www.python.org/downloads/)
-
-2. **Geospatial Libraries**
-   - GDAL: [Download GDAL](https://gdal.org/download.html)
-
-3. **R Specific Libraries**
-   - This is specified in the code.
+1. **R** (Version 4.3.1 or later)
+   - [Download R](https://cran.r-project.org/)
+   
+2. (Optional but recommended) **RStudio** 
+   - [Download RStudio](https://posit.co/download/rstudio-desktop/)
 
 ### Installation Steps
 1. Clone the repository:
@@ -28,14 +25,16 @@ To use Robusta, you need the following software installed on your system:
 
 3. Install required dependencies by running the following in your R console:
    ```R
-   install.packages(c("x"))
+   x <- c("shiny", "grid","sf", "gridExtra", "bslib", "zip", "shinyjs", "markdown")
+   
+   install.packages(x)
    ```
-   Note that this step is made significantly simpler in RStudio, where the user is invited to install relevant pacakges simply by clicking "Run All".
-
-4. Run the application by sourcing the main script:
+ 
+4. Run the application by running the main script either via the console:
    ```R
-   source("robusta_main.R")
+   runApp("app.R")
    ```
+   Or by simply pressing "Run App" in the top right corner. 
 
 ---
 
