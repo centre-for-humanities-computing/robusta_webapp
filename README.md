@@ -1,6 +1,6 @@
 # Robusta
 
-Robusta is a web app implementing the ideas of Herrera Malatesta and de Valeriola (2024). It provides a way to quantify uncertainties in spatial analysis within the field of archaeology. By providing tools for data processing, visualization, and statistical analysis, Robusta enables archaeologists to make informed decisions based on spatial data while accounting for uncertainties. Check out the web app for a more thorough description.
+Robusta is an app implementing the ideas of Herrera Malatesta and de Valeriola (2024). It provides a way to quantify uncertainties in spatial analysis within the field of archaeology. By providing tools for data processing, visualization, and statistical analysis, Robusta enables archaeologists to make informed decisions based on spatial data while accounting for uncertainties. Check out the app for a more thorough description.
 
 ---
 

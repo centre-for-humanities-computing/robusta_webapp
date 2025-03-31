@@ -5,10 +5,11 @@ library(sf)
 library(grid)
 library(gridExtra)
 library(bslib)
-source("R/utils_Rdata.R")
 library(zip)
 library(shinyjs)
 library(markdown)
+
+source("R/utils_Rdata.R")
 
 # loading the text for showing in the server
 name_text <- paste(readLines("data/texts/name.txt"), collapse = "\n")
