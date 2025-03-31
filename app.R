@@ -23,10 +23,10 @@ ui <- fluidPage(
     .shiny-notification {
       position: fixed;
       top: 90%;
-      left: 3%;
+      left: 1%;
       height: 100px;
       font-size: 20px;
-      width: 400px;
+      width: 600px;
       background-color: #ececec; 
       color: black;
       opacity: 1;
