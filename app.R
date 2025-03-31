@@ -17,7 +17,22 @@ ui <- fluidPage(
   theme = bslib::bs_theme(version = 5, bootswatch = "flatly"),
   # loading css style sheet
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
+    # setting options for the loading bar
+    tags$style(HTML(" 
+    .shiny-notification {
+      position: fixed;
+      top: 90%;
+      left: 3%;
+      height: 100px;
+      font-size: 20px;
+      width: 400px;
+      background-color: #ececec; 
+      color: black;
+      opacity: 1;
+      border-radius: 5px;
+    }
+  ")),
   ),
   useShinyjs(), # for toggling download button on and off
   sidebarLayout(
@@ -128,23 +143,7 @@ ui <- fluidPage(
               div(actionButton("submit_button_2", "Submit", class = "btn-success"), id = "div_submit_button"),
               div(disabled(downloadButton("download2")), id = "div_download_button")),
             HTML("<br><br><br>"),
-            splitLayout(cellWidths = c("50%", "50%"),
-              div(a(
-                href = "https://github.com/centre-for-humanities-computing/robusta_webapp",
-                icon("github", "fa-2x"),
-                target = "_blank",
-                style = "color: #0B1215; margin-left: 40%"
-                )
-              ),
-              div(a(
-                href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743",
-                icon("paperclip", "fa-2x"),
-                target = "_blank",
-                style = "color: #0B1215; margin-left: 40%"
-                )
-              )
             )
-          )
         ),
       ),
       width = 2,
