@@ -17,24 +17,10 @@ name_text <- paste(readLines("data/texts/name.txt"), collapse = "\n")
 ui <- fluidPage(
   theme = bslib::bs_theme(version = 5, bootswatch = "flatly"),
   # loading css style sheet
-  tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
-    # setting options for the loading bar
-    tags$style(HTML(" 
-    .shiny-notification {
-      position: fixed;
-      top: 90%;
-      left: 1%;
-      height: 100px;
-      font-size: 20px;
-      width: 600px;
-      background-color: #ececec; 
-      color: black;
-      opacity: 1;
-      border-radius: 5px;
-    }
-  ")),
-  ),
+  tags$head(includeCSS("www/style.css")),
+  # tags$head(
+  #   tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
+  # ),
   useShinyjs(), # for toggling download button on and off
   sidebarLayout(
     sidebarPanel(id = "sidebar_id",
@@ -162,9 +148,10 @@ ui <- fluidPage(
                    h4("Introduction"),
                    includeMarkdown("data/texts/introduction.md"),
                    HTML("<br>"),
-                   h4("How to use"),
-                   includeMarkdown("data/texts/how_to.md"),
-                   HTML("<br>"),
+                   actionButton("toggle_how_to", "▼ How to use", class = "header-btn"),
+                   div(id = "how_to_content", style = "display: none;",
+                       includeMarkdown("data/texts/how_to.md")),
+                   HTML("<br><br>"),
                    h4("Results"),
                    includeMarkdown("data/texts/results.md"),
                    HTML("<br>"),
@@ -254,6 +241,10 @@ server <- function(input, output, session) {
 
   # object to hold output from the function
   data_output <- reactiveValues(data = NULL)
+  
+  observeEvent(input$toggle_how_to, {
+    toggle("how_to_content")  # Shows/hides the how-to section
+  })
   
   # Observer to start function processing
   observeEvent(input$submit_button_1, {

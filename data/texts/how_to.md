@@ -1,6 +1,4 @@
-Robusta exists both as an interactive web app and as an open-source tool that can be downloaded and run locally. The web app is primarily meant as a demo, and can become unstable when running bigger computations.
-We therefore recommend that users download the app if they want to play around with their own datasets and larger numbers of simulations, and only use the test dataset and a low number of simulations when using the web app. <br>
-*To download the app, go to [this GitHub repo](https://github.com/centre-for-humanities-computing/robusta_webapp).*
+<br>
 
 On Robusta you can either upload your own data for processing or use the Montecristo data used by [Herrera Malatesta and de Valeriola (2024)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743). <br>
 The Montecristo data is meant as a test dataset, where you can play a bit around with the parameters and see potential outputs. 

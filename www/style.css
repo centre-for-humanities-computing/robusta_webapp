@@ -36,12 +36,6 @@
       .nav-item {
         margin: 0px 0px 0px 10px;
       }
-      .shiny-notification {
-        width: 800px;
-        position: fixed;
-        bottom: 0px;
-        right: 0px;
-      }
       .error-message {
         background-color: #f8d7da;   /* Light red background */
         color: #721c24;              /* Dark red text */
@@ -101,6 +95,16 @@
       .info-icon:hover .hoverbox {
         visibility: visible;
       }
+      .header-btn{
+        visibility: visible;
+        background-color: white;
+        color: black;
+        font-size: 23px;
+        padding: 10px;
+      }
+      .header-btn:hover {
+         background-color: #ddd;
+      }
       #div_submit_button {
         display: flex;
         justify-content: center;
@@ -112,3 +116,15 @@
         justify-content: center;
         align-items: center;
       }
+      .shiny-notification {
+      position: fixed;
+      top: 90%;
+      left: 1%;
+      height: 100px;
+      font-size: 20px;
+      width: 600px;
+      background-color: #ececec; 
+      color: black;
+      opacity: 1;
+      border-radius: 5px;
+    }
