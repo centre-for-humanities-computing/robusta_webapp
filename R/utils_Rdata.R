@@ -354,7 +354,23 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
         )
       # if folders 100 and nbRobSc 1 save plot that is slightly different
       if (folders[i] == "100" & k == 1){
-        example_map_plot <- p1
+        p100 = ggplot() +
+          layer_spatial(data = thisSp, aes(color = "Sites"), fill = "antiquewhite", size = 0.7) +
+          scale_color_manual(
+            values = c("Sites" = "black"),
+            guide = guide_legend(
+              override.aes = list(
+                fill = "black",
+                color = "black",
+                shape = 21
+              ))) +
+          labs(color = NULL) +
+          theme_void() +
+          theme(
+            legend.position = "bottom",
+            legend.text = element_text(size = 9, margin = margin(l = 5, r = 10, unit = "pt"))
+          )
+        example_map_plot <- p100
       }
       thisData = tibble(y = pctShockedData[,k], x = pctOriginal$r)
       p3 = p0 + geom_line(aes(x=x, y=y), data = thisData, linewidth = 0.75) + 
