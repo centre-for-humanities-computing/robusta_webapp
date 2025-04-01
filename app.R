@@ -143,8 +143,7 @@ ui <- fluidPage(
               HTML("<br><br>"),
               h2(name_text),
               HTML("<br>"),
-              id = "main_tab",
-      navbarPage(title = "", 
+      navbarPage(title = "", id = "main_tab",
         tabPanel("Home",
                  hr(style = "margin: 0px 20px 20px 0px"),
                  fluidPage(
