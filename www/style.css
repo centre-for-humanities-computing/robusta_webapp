@@ -5,7 +5,7 @@
         height: 100vh;
         overflow-y: scroll;
         z-index: 2;
-        
+        overflow: visible;
       }
       .title {
         height: 10vh;
@@ -19,6 +19,7 @@
       #side_navbar .nav-item {
         margin-left: auto;
         margin-right: auto;
+        overflow: visible;
       }
       .navbar {
         --bslib-navbar-default-bg: ;
@@ -60,11 +61,18 @@
         font-size: 16px;
         margin-left: 3px; /* Add horizontal space */
       }
-      #home_page {
+      .home_page {
         padding-left: 20px;
         padding-right: 20px;
         z-index: 2;
+        overflow: visible !important;
       }
+      
+      #main_tab {
+        z-index: 1;
+        overflow: visible !important;
+      }
+
       .hoverbox {
         visibility: hidden;
         width: 170px;
@@ -74,11 +82,12 @@
         border-radius: 6px;
         padding: 8px;
         position: absolute;
-        bottom: 125%;
-        left: 50%;
-        margin-left: -100px;
+        z-index: 9999;
+        top: -5px;
+        left: 25px;
         border: 1px solid #ddd;
         box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+        opacity: 0;
       }
 
       .hoverbox::after {
@@ -94,7 +103,8 @@
 
       .info-icon:hover .hoverbox {
         visibility: visible;
-        z-index: 999;
+        opacity: 1;
+
       }
       .header-btn{
         visibility: visible;

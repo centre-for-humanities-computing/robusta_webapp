@@ -31,9 +31,9 @@ ui <- fluidPage(
      #  h3("Settings", style = "text-align: center; margin: 20px 0px 40px 0px"),
       navbarPage("", id = "side_navbar",
        tabPanel("Test",
+                h4("Simulations with Montecristi Dataset"),
         hr(style = "margin: 0px 20px 20px 0px"),
         fluidPage(
-          h4("Simulations with Montecristi Dataset"),
           numericInput("mc_simulations_1", label = HTML(
               'Number of Monte Carlo simulations
               <span class="info-icon">&#9432;
@@ -143,7 +143,8 @@ ui <- fluidPage(
               HTML("<br><br>"),
               h2(name_text),
               HTML("<br>"),
-      navbarPage(title = "", id = "main_tab",
+              id = "main_tab",
+      navbarPage(title = "", 
         tabPanel("Home",
                  hr(style = "margin: 0px 20px 20px 0px"),
                  fluidPage(
@@ -189,7 +190,7 @@ ui <- fluidPage(
                     )
                   ),
                   #  HTML("<br><br>"),
-                   id = "home_page")
+                   class = "home_page")
         ),
         tabPanel("Output",
                  hr(style = "margin: 0px 0px 20px 0px"),
@@ -206,7 +207,7 @@ ui <- fluidPage(
                               uiOutput("comparison_tools_conditional")
                               )
                      ),
-                 id = "home_page"),
+                 class = "home_page"),
         ),
         tabPanel("Methods",
                  hr(style = "margin: 0px 0px 20px 0px"),
@@ -214,7 +215,7 @@ ui <- fluidPage(
                    HTML("<br>"),
                    h4("Framework and background"),
                    includeMarkdown("data/texts/method.md"),
-                   id = "home_page"),
+                   class = "home_page"),
         ),
         tabPanel("More Info",
                  hr(style = "margin: 0px 0px 20px 0px"),
@@ -228,7 +229,7 @@ ui <- fluidPage(
                    includeMarkdown("data/texts/github.md"),
                    h4("Data privacy"),
                    includeMarkdown("data/texts/data_privacy.md"),
-                 id = "home_page"),
+                 class = "home_page"),
         ), selected = "Home"
       ),  
     )
