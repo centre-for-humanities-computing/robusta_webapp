@@ -516,7 +516,7 @@ output$plot_100_1 <- renderPlot({
         HTML("<br>"),
         h4("Comparison Tools"),
         HTML("<br>"),
-        plotOutput("plot_compare", width = "80%", height = "800px")
+        plotOutput("plot_compare", width = "80%", height = "1000px")
       )
     } else if (function_error()) {
       div(
