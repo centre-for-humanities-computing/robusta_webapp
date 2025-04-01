@@ -76,6 +76,7 @@ ui <- fluidPage(
         )
         ),
         tabPanel("Upload",
+          h4("Simulations with uploaded dataset"),
           hr(style = "margin: 0px 20px 20px 0px"),
           fluidPage(
             fileInput("upload1", label = HTML(
