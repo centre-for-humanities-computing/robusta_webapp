@@ -78,7 +78,7 @@ ui <- fluidPage(
               'Upload Spatial Points
               <span class="info-icon">&#9432;
                 <div class="hoverbox">
-                  Upload a .shp and a .shx file.
+                  Upload a .shp <i>and</i> a .shx file. Files must be uploaded simultaneously, so hold CTRL down while selecting files. 
                 </div>
               </span>'
             ), accept = c(".shp", ".shx"), multiple = TRUE),
@@ -87,7 +87,7 @@ ui <- fluidPage(
               'Upload Spatial Polygons
               <span class="info-icon">&#9432;
                 <div class="hoverbox">
-                  Upload a .shp and a .shx file.
+                  Upload a .shp <i>and</i> a .shx file. Files must be uploaded simultaneously, so hold CTRL down while selecting files. 
                 </div>
               </span>'), accept = c(".shp", ".shx"), multiple = TRUE),
             br(),
