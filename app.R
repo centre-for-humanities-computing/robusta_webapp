@@ -33,7 +33,7 @@ ui <- fluidPage(
        tabPanel("Test",
         hr(style = "margin: 0px 20px 20px 0px"),
         fluidPage(
-          p("Simulations with Montecristi Dataset"),
+          h4("Simulations with Montecristi Dataset"),
           numericInput("mc_simulations_1", label = HTML(
               'Number of Monte Carlo simulations
               <span class="info-icon">&#9432;
