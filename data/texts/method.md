@@ -27,7 +27,7 @@ Carlo simulation envelope for each of the sampled groups. The resulting models a
 Note that in our paper we used two sampling methods, one using a uniform distribution and another one using an inhomogeneous distribution. 
 To make the app work optimally, only the sampling via the uniform distribution is provided. 
 If a more experienced researcher would like to access the code and consider the inhomogeneous distribution, 
-please check out the original code <a href="https://osf.io/u2gyq/" target="_blank">here</a>.
+please check out the original code on [OSF]("https://osf.io/u2gyq/"). 
 
 **Step 3 - Comparison Tools**
 
@@ -42,5 +42,5 @@ This figure provides a direct percentage of the probability that, by extracting 
 the results of the robustness scenario will be similar to "the observable".
 
 The second comparison tool goes deeper into understanding these patterns and provides insight into what can be further observed from the clustering patterns.
-At this point, it is important to clarify that the app is only analyzing the statistically significant patterns on the PCF, and not the regular ones. 
+At this point, it is important to clarify that the app is only analyzing the statistically significant cluster patterns on the PCF, and not the regular ones. 
 Again, if a researcher would like to include this in their analysis, they need to modify the source code.
