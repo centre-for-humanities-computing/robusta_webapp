@@ -334,10 +334,10 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
     for (k in 1:nbRobSc){
       thisSp = shockedSp[[k]]
       p1 = ggplot() +
-        layer_spatial(data = sp_unmark, aes(color = "Original Sites"), fill = "antiquewhite") +
-        layer_spatial(data = thisSp, aes(color = "Selected Sites"), fill = NA) +
+        layer_spatial(data = sp_unmark, aes(color = "Selected Sites"), fill = "antiquewhite", size = 1.5) +
+        layer_spatial(data = thisSp, aes(color = "Sites"), fill = NA, size = 0.7) +
         scale_color_manual(
-          values = c("Original Sites" = "red", "Selected Sites" = "black"),
+          values = c("Selected Sites" = "red", "Sites" = "black"),
           guide = guide_legend(
             override.aes = list(
               fill = c("red","black"),
@@ -352,6 +352,10 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
           legend.position = "bottom",
           legend.text = element_text(size = 9, margin = margin(l = 5, r = 10, unit = "pt"))
         )
+      # if folders 100 and nbRobSc 1 save plot that is slightly different
+      if (folders[i] == "100" & k == 1){
+        example_map_plot <- p1
+      }
       thisData = tibble(y = pctShockedData[,k], x = pctOriginal$r)
       p3 = p0 + geom_line(aes(x=x, y=y), data = thisData, linewidth = 0.75) + 
         scale_y_continuous(limits = c(0,4.5)) + 
@@ -361,10 +365,7 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
       p_combine = grid.arrange(p3,p1,ncol = 2)
 
       map_plots_a[[folders[i]]][[k]] <- p1
-      # if folders 100 and nbRobSc 1 save plot
-      if (folders[i] == "100" & k == 1){
-        example_map_plot <- p1
-      }
+      
       all_plots_a[[folders[i]]][[k]] <- p3
       combined_plots[[folders[i]]][[k]] <- p_combine
       print(paste0(i," -- ",k))
