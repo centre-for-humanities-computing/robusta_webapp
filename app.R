@@ -22,9 +22,13 @@ ui <- fluidPage(
   #   tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
   # ),
   useShinyjs(), # for toggling download button on and off
-  sidebarLayout(
-    sidebarPanel(id = "sidebar_id",
-      h3("Settings", style = "text-align: center; margin: 20px 0px 40px 0px"),
+  sidebarLayout(fluid = F, 
+    sidebarPanel(width = 3,
+                 HTML("<br><br>"),
+                 h3("Settings", style = "text-align: center"),
+                 HTML("<br>"),
+                 id = "sidebar_id",
+     #  h3("Settings", style = "text-align: center; margin: 20px 0px 40px 0px"),
       navbarPage("", id = "side_navbar",
        tabPanel("Test",
         hr(style = "margin: 0px 20px 20px 0px"),
@@ -133,17 +137,17 @@ ui <- fluidPage(
             )
         ),
       ),
-      width = 2,
-      style="font-size:20px;"
     ),
-    mainPanel(
+    mainPanel(width = 9, 
+              HTML("<br><br>"),
+              h2(name_text),
+              HTML("<br>"),
       navbarPage(title = "", id = "main_tab",
         tabPanel("Home",
                  hr(style = "margin: 0px 20px 20px 0px"),
                  fluidPage(
                    uiOutput("test"),
-                   h3(name_text),
-                   HTML("<i> For the best experience in browser, we recommend zooming out to 75% or 80%. </i>"),
+                   HTML("<i> For the best experience on the web app, we recommend zooming out the browser window to 75% or 80%. </i>"),
                    HTML("<br><br>"),
                    h4("Introduction"),
                    includeMarkdown("data/texts/introduction.md"),
@@ -189,7 +193,6 @@ ui <- fluidPage(
         tabPanel("Output",
                  hr(style = "margin: 0px 0px 20px 0px"),
                  fluidPage(
-                   h3(name_text),
                    HTML("<br>"),
                    tabsetPanel(
                      tabPanel("PCF based on 100% of sites",
@@ -207,7 +210,6 @@ ui <- fluidPage(
         tabPanel("Methods",
                  hr(style = "margin: 0px 0px 20px 0px"),
                  fluidPage(
-                   h3(name_text),
                    HTML("<br>"),
                    h4("Framework and background"),
                    includeMarkdown("data/texts/method.md"),
@@ -216,7 +218,6 @@ ui <- fluidPage(
         tabPanel("More Info",
                  hr(style = "margin: 0px 0px 20px 0px"),
                  fluidPage(
-                   h3(name_text),
                    HTML("<br>"),
                    h4("Original data"),
                    includeMarkdown("data/texts/original_data.md"),
@@ -228,7 +229,7 @@ ui <- fluidPage(
                    includeMarkdown("data/texts/data_privacy.md"),
                  id = "home_page"),
         ), selected = "Home"
-      ), width = 10
+      ),  
     )
   ),
 )

@@ -1,11 +1,11 @@
 /* Adjust the sidebar to fill the full height of the viewport */
       /* Custom CSS for titlePanel size */
       #sidebar_id {
-        /* background-color: aquamarine; */
-        position: fixed;
+        /* position: fixed;*/
         height: 100vh;
-        width: 16.66667%;
         overflow-y: scroll;
+        z-index: 2;
+        
       }
       .title {
         height: 10vh;
@@ -23,7 +23,7 @@
       .navbar {
         --bslib-navbar-default-bg: ;
         --bs-navbar-padding-y: 0;
-        margin: 20px 0px 0px 0px;
+        /* margin: 20px 0px 0px 0px; */
         
       }
       .navbar-nav {
@@ -63,17 +63,17 @@
       #home_page {
         padding-left: 20px;
         padding-right: 20px;
+        z-index: 2;
       }
       .hoverbox {
         visibility: hidden;
-        width: 200px;
+        width: 170px;
         background-color: #f9f9f9;
         color: #000;
         text-align: left;
         border-radius: 6px;
         padding: 8px;
         position: absolute;
-        z-index: 1;
         bottom: 125%;
         left: 50%;
         margin-left: -100px;
@@ -94,6 +94,7 @@
 
       .info-icon:hover .hoverbox {
         visibility: visible;
+        z-index: 999;
       }
       .header-btn{
         visibility: visible;
