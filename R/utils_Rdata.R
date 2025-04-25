@@ -331,8 +331,8 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
     for (k in 1:nbRobSc){
       thisSp = shockedSp[[k]]
       p1 = ggplot() +
-        layer_spatial(data = sp_unmark, aes(color = "Selected Sites"), fill = "antiquewhite", size = 1.5) +
-        layer_spatial(data = thisSp, aes(color = "Sites"), fill = NA, size = 0.7) +
+        layer_spatial(data = sp_unmark, aes(color = "Selected Sites"), fill = "antiquewhite", size = 0.85) +
+        layer_spatial(data = thisSp, aes(color = "Sites"), fill = NA, size = 0.9) +
         scale_color_manual(
           values = c("Selected Sites" = "red", "Sites" = "black"),
           guide = guide_legend(
@@ -352,7 +352,7 @@ comparison_tool_a <- function(sp_unmark, nbRobSc, pctShockedData_list, shockedSp
       # if folders 100 and nbRobSc 1 save plot that is slightly different
       if (folders[i] == "100" & k == 1){
         p100 = ggplot() +
-          layer_spatial(data = thisSp, aes(color = "Sites"), fill = "antiquewhite", size = 0.7) +
+          layer_spatial(data = thisSp, aes(color = "Sites"), fill = "antiquewhite", size = 1.25) +
           scale_color_manual(
             values = c("Sites" = "black"),
             guide = guide_legend(
