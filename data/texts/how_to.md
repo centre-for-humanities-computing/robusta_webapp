@@ -1,7 +1,9 @@
 <br>
 
-On Robusta you can either upload your own data for processing or use the Montecristo data used by [Herrera Malatesta and de Valeriola (2024)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743). <br>
+On Robusta you can either upload your own data for processing or use the Montecristi data used by [Herrera Malatesta and de Valeriola (2024)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307743). <br>
 The Montecristi data is meant as a test dataset, where you can play a bit around with the parameters and see potential outputs. 
+
+If you change between the test data and uploading your own, we recommend refreshing the page / closing the app and re-running. Otherwise the app might behave in unpredictable ways when encountering an error.
 
 **(Optional) Upload your own data** <br>
 When using your own data, the dataset should be in the shapefile format and consist of a series of georeferenced points, in addition to a georeferenced polygon of the research area. <br>
