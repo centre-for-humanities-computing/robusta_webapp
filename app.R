@@ -240,6 +240,8 @@ server <- function(input, output, session) {
   # Reactive value to track if the function has run
   function_ran <- reactiveVal(FALSE)
   function_error <- reactiveVal(FALSE)
+  
+  
 
   # object to hold output from the function
   data_output <- reactiveValues(data = NULL)
@@ -256,6 +258,7 @@ server <- function(input, output, session) {
     shinyjs::disable("download2")
     
     function_error(FALSE)
+    function_ran(FALSE)
 
     file_shp <- st_read("data/montecristi/mc-db-95-clean.shp")
     file_poly <- st_read("data/montecristi/nmcpoly1.shp")
@@ -305,7 +308,6 @@ server <- function(input, output, session) {
 
   # Observer to start function processing
   observeEvent(input$submit_button_2, {
-
     shinyjs::disable("submit_button_1")
     shinyjs::disable("submit_button_2")
     shinyjs::disable("download1")
@@ -351,20 +353,22 @@ server <- function(input, output, session) {
     }
     if (input$quantile_995_upload){
       quantiles <- c(quantiles, 0.995)
+      
     }
+    
+    data_output$data <- tryCatch({big_processing_func(file_shp = file_shp,
+                                                      file_poly = file_poly,
+                                                      nsim = as.integer(input$mc_simulations_2/5), # it should be divided by number of clusters
+                                                      clusters = 5,
+                                                      nbRobSc = input$nbRobSc_2,
+                                                      quantiles = quantiles,
+                                                      quantile_50 = TRUE)}, error = function(e) {return(NULL)})
 
-    data_output$data <- big_processing_func(file_shp = file_shp,
-                         file_poly = file_poly,
-                         nsim = as.integer(input$mc_simulations_2/5), # it should be divided by number of clusters
-                         clusters = 5,
-                         nbRobSc = input$nbRobSc_2,
-                         quantiles = quantiles,
-                         quantile_50 = TRUE)
 
     if(is.null(data_output$data)){
       function_error(TRUE)
     } else {
-       function_ran(TRUE)
+      function_ran(TRUE)
     }
 
     updateTabsetPanel(session, "main_tab",
@@ -428,7 +432,10 @@ output$plot_100_1 <- renderPlot({
         class = "center-content",  # Wrapper to center content
         div(
           class = "error-message",  # Custom error styling
-          "An error occured, and is likely due either a too low or too high number of Monte Carlo simulations. Try running it again with a number of simluations between 25 and 10.000"
+          "An error occured. This is likely due to either a too low or too high number of Monte Carlo simulations.
+          Try running it again with a number of simluations between 25 and 10.000. 
+          If the error persists then it is likely because there is no value for which the curve jumps in the original data,
+          meaning the data is inappropriate for this analysis. Try with a different dataset."
         )
       )
     } else {
@@ -494,7 +501,10 @@ output$plot_100_1 <- renderPlot({
         class = "center-content",  # Wrapper to center content
         div(
           class = "error-message",  # Custom error styling
-          "An error occured, and is likely due to low number of Monte Carlo simulations. Try running it again or increase number of simulations to at least 25."
+          "An error occured. This is likely due to either a too low or too high number of Monte Carlo simulations.
+          Try running it again with a number of simluations between 25 and 10.000. 
+          If the error persists then it is likely because there is no value for which the curve jumps in the original data,
+          meaning the data is inappropriate for this analysis. Try with a different dataset."
         )
       )
     } else {
@@ -523,7 +533,10 @@ output$plot_100_1 <- renderPlot({
         class = "center-content",  # Wrapper to center content
         div(
           class = "error-message",  # Custom error styling
-          "An error occured, and is likely due to low number of Monte Carlo simulations. Try running it again or increase number of simulations to at least 25."
+          "An error occured. This is likely due to either a too low or too high number of Monte Carlo simulations.
+          Try running it again with a number of simluations between 25 and 10.000. 
+          If the error persists then it is likely because there is no value for which the curve jumps in the original data,
+          meaning the data is inappropriate for this analysis. Try with a different dataset."
         )
       )
     } else {

@@ -234,17 +234,14 @@ assess_robustness_scenarios_a <- function(sp_unmark, nbRobSc, pctShockedData_lis
   }
   
   originalInterval = tibble(inf = NA, sup = NA, level = levelsHigh)
-  print(levelsHigh)
   for (j in 1:LE){
-    print(levelsHigh[j])
     thisQuantile = subset(allQuantilesT, level == levelsHigh[j])
-    print(thisQuantile)
     indExceed = which(pctOriginal$iso > thisQuantile$value)
     difExceed = c(0,diff(indExceed))
     indJump = which(difExceed>2)
     rStart = thisQuantile$r[indExceed[indJump]]
     rEnd = thisQuantile$r[indExceed[length(indExceed)]]
-    originalInterval$inf[j] = rStart
+    originalInterval$inf[j] <- rStart
     originalInterval$sup[j] = rEnd
   }
   
@@ -463,14 +460,20 @@ big_processing_func <- function(file_shp, file_poly, nsim, clusters, nbRobSc, qu
     incProgress(incprogress_number, detail = "Generating Robustness Scenarios A")
     print("start of script 04_generateRobust...A.R")
     output <- generate_robustness_scenarios_a(data[["sp_unmark"]], nbRobSc)
+    
     pctShockedData_list <- output[["pctShockedData_list"]]
     shockedSp_list <- output[["shockedSp_list"]]
     
     incProgress(incprogress_number, detail = "Robustness Experiment A")
     print("start of script 07_assessRobust...A.R")
-    output_plots <- assess_robustness_scenarios_a(data[["sp_unmark"]], nbRobSc, pctShockedData_list, allQuantilesT_list, quantiles = quantiles)
-    plot_compare_exp_a <- output_plots[["plot_compare_exp_a"]]
+    output_plots <- assess_robustness_scenarios_a(data[["sp_unmark"]], 
+                                                            nbRobSc, 
+                                                            pctShockedData_list, 
+                                                            allQuantilesT_list, 
+                                                            quantiles = quantiles)
     
+    plot_compare_exp_a <- output_plots[["plot_compare_exp_a"]]
+
     incProgress(incprogress_number, detail = "Comparison Tools")
     print("start of script 09_Comparison...E1.R")
     output <- comparison_tool_a(data[["sp_unmark"]], nbRobSc, pctShockedData_list, shockedSp_list, allQuantilesT_list, quantiles = quantiles, quantile_50 = quantile_50)
