@@ -20,7 +20,8 @@ To use Robusta, you need the following software installed on your system:
 Robusta is an R shiny app that opens a separate app window on your machine, which is where you can interact with the setting and the results.
 To install and open the app, follow these steps:
 
-1. Clone the repository:
+1. Clone the repository
+
 In your terminal, navigate to a folder of your choice using cd and then run the following command: 
    ```bash
    git clone https://github.com/centre-for-humanities-computing/robusta_webapp.git
@@ -29,6 +30,7 @@ In your terminal, navigate to a folder of your choice using cd and then run the 
 2. In RStudio or your preferred R environment open the Robusta Webapp project.
 
 3. Install required dependencies 
+
 In your R console, run the following two commands:
    ```R
    x <- c("shiny", "grid","sf", "gridExtra", "bslib", "zip", "shinyjs", "markdown",
@@ -39,19 +41,20 @@ In your R console, run the following two commands:
    ```
 
 4. Run the application by running the main script
+
 You can either start the app by running the following command in your R console:
    ```R
    runApp("app.R")
    ```
-Or you can simply pressing "Run App" in the top right corner. 
+Or you can simply press "Run App" in the top right corner. 
 
 ---
 
-## How to use
+## How to use 
 A thorough guide can be seen in the app itself, but here follows a TL;DR version. 
 
 You can either upload your own data for processing or use the Montecristi test data. 
-If you change between the test data and uploading your own, we recommend refreshing the page / closing the app and re-running. 
+If you change between the test data and uploading your own, we recommend closing the app and re-running the script. 
 Otherwise the app might behave in unpredictable ways when encountering an error.
 
 **(Optional) Upload your own data** <br>
@@ -66,10 +69,12 @@ After specifying data, set the number of Monte Carlo simulations and the number 
 When running locally we recommend the following values: 
 - For Monte Carlo simulations: values between 1000 and 5000. 
 - For the Robustness Scenarios: values between 100 and 3000. 
-**IMPORTANT** Dependent on the computational power of your machine, the processing can take anything from a few minutes to several hours. 
+ 
 
 **Select Quantiles** <br>
 As the final step, you need to select which quantiles to run with. In the Quantile dropdown menu, you will be presented with the option of choosing one or several quantiles. 
+
+**IMPORTANT** Dependent on the computational power of your machine, the processing can take anything from a few minutes to several hours.
 
 
 ## Contact Information
