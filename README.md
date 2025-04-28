@@ -17,18 +17,8 @@ To use Robusta, you need the following software installed on your system:
    - [Download RStudio](https://posit.co/download/rstudio-desktop/)
    
 3. **Geospatial Libraries**
-The library GDAL is necessary for the R packages to work.
-The recommended install method is by downloading it manually from the website:
+GDAL is necessary for the spatial R packages to work. It can downloaded via the website:
    - GDAL: [Download GDAL](https://gdal.org/download.html)
-
-For Linux, you can also install the library via the terminal using this command:
-  ```bash
-  sudo apt-get install gdal-bin
-  ```
-And for MacOS, GDAL can be also install via the following terminal command (requires Homebrew): 
-  ```bash
-  brew install gdal
-  ```
 
 ### Installation Steps
 Robusta is an R shiny app that opens a separate app window on your machine, which is where you can interact with the setting and the results.
